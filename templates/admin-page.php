@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) exit;
         <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
         <input type="text" id="batch_id" name="batch_id" required />
 
-        <label for="customer"><?php _e('Customer (optional):', 'batch-id'); ?></label>
+        <label for="customer"><?php _e('Associate a customer (optional):', 'batch-id'); ?></label>
         <input type="text" id="customer" name="customer" placeholder="Search customer..." />
         <input type="hidden" id="customer_id" name="customer_id" />
 
