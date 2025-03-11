@@ -36,6 +36,7 @@ if (!defined('ABSPATH')) exit;
                     <th><?php _e('Batch ID', 'batch-id'); ?></th>
                     <th><?php _e('Customer', 'batch-id'); ?></th>
                     <th><?php _e('Barcodes', 'batch-id'); ?></th>
+                    <th><?php _e('Actions', 'batch-id'); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +70,11 @@ if (!defined('ABSPATH')) exit;
                                     ?>
                                 </ul>
                             </div>
+                        </td>
+                        <td>
+                            <button class="delete-batch button button-link-delete" data-batch="<?php echo esc_attr($batch->batch_id); ?>" title="<?php _e('Supprimer ce Batch ID', 'batch-id'); ?>">
+                                🗑️
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
