@@ -78,9 +78,13 @@ function batch_id_admin_page() {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($batch_ids as $batch) : ?>
+                    <?php foreach ($batch_ids as $batch) :
+                        // Vérifier si tous les barcodes du batch sont utilisés
+                        $unused_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0", $batch->batch_id));
+                        $batch_style = ($unused_count == 0) ? 'style="text-decoration: line-through; color: red;"' : '';
+                    ?>
                         <tr>
-                            <td><?php echo esc_html($batch->batch_id); ?></td>
+                            <td <?php echo $batch_style; ?>><?php echo esc_html($batch->batch_id); ?></td>
                             <td>
                                 <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch->batch_id); ?>">
                                     <?php _e('Voir les barcodes', 'batch-id'); ?>
@@ -88,9 +92,10 @@ function batch_id_admin_page() {
                                 <div class="barcodes-list" data-batch="<?php echo esc_attr($batch->batch_id); ?>" style="display:none;">
                                     <ul>
                                         <?php
-                                        $barcodes = $wpdb->get_results($wpdb->prepare("SELECT barcode FROM $table_barcodes WHERE batch_id = %s", $batch->batch_id));
+                                        $barcodes = $wpdb->get_results($wpdb->prepare("SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s", $batch->batch_id));
                                         foreach ($barcodes as $barcode) {
-                                            echo '<li>' . esc_html($barcode->barcode) . '</li>';
+                                            $barcode_style = ($barcode->is_used == 1) ? 'style="text-decoration: line-through; color: red;"' : '';
+                                            echo '<li ' . $barcode_style . '>' . esc_html($barcode->barcode) . '</li>';
                                         }
                                         ?>
                                     </ul>
@@ -101,7 +106,7 @@ function batch_id_admin_page() {
                 </tbody>
             </table>
         <?php else : ?>
-            <p><?php _e('Aucun Batch ID généré.', 'batch-id'); ?></p>
+            <p><?php _e('No Batch IDs generated.', 'batch-id'); ?></p>
         <?php endif; ?>
     </div>
 
