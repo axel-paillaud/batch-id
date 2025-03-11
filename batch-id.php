@@ -13,6 +13,19 @@
  * Domain Path:       /languages
  */
 
+if (!defined('ABSPATH')) {
+     exit;
+}
+
+require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
+require_once plugin_dir_path(__FILE__) . 'includes/front-display.php';
+require_once plugin_dir_path(__FILE__) . 'includes/hooks.php';
+
+function batch_id_load_textdomain() {
+    load_plugin_textdomain('batch-id', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+add_action('plugins_loaded', 'batch_id_load_textdomain');
+
 register_activation_hook(__FILE__, 'batch_id_activate');
 
 register_deactivation_hook(__FILE__, 'batch_id_deactivate');
