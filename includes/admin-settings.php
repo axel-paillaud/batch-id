@@ -17,6 +17,21 @@ function batch_id_add_admin_menu() {
 
 add_action('admin_menu', 'batch_id_add_admin_menu');
 
+// Add JS script to hide or show barcode
+function batch_id_enqueue_admin_scripts($hook) {
+    // Check if we are on the plugin page
+    if ($hook !== 'toplevel_page_batch-id-settings') {
+        return;
+    }
+
+    // Retrieve the plugin URL
+    $plugin_url = plugin_dir_url(__FILE__);
+
+    // Enqueue and load the script JS
+    wp_enqueue_script('batch-id-admin-js', $plugin_url . '../assets/js/admin.js', [], false, true);
+}
+add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');
+
 function batch_id_admin_page() {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
@@ -121,24 +136,6 @@ function batch_id_admin_page() {
             <p><?php _e('No Batch IDs generated.', 'batch-id'); ?></p>
         <?php endif; ?>
     </div>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".toggle-barcodes").forEach(button => {
-            button.addEventListener("click", function() {
-                let batchId = this.getAttribute("data-batch");
-                let barcodeList = document.querySelector(".barcodes-list[data-batch='" + batchId + "']");
-                if (barcodeList.style.display === "none") {
-                    barcodeList.style.display = "block";
-                    this.textContent = "<?php _e('Masquer les barcodes', 'batch-id'); ?>";
-                } else {
-                    barcodeList.style.display = "none";
-                    this.textContent = "<?php _e('Voir les barcodes', 'batch-id'); ?>";
-                }
-            });
-        });
-    });
-    </script>
 
     <?php
 }
