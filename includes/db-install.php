@@ -39,6 +39,3 @@ function batch_id_create_tables() {
     dbDelta($sql1);
     dbDelta($sql2);
 }
-
-// Hook to create tables on plugin activation
-register_activation_hook(__FILE__, 'batch_id_create_tables');
