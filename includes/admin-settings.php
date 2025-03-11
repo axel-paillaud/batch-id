@@ -1,4 +1,3 @@
-
 <?php
 if (!defined('ABSPATH')) {
     exit;
@@ -34,13 +33,13 @@ function batch_id_admin_page() {
         // Check if the Batch ID exists
         $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
 
-        if ($exists) {
-            $response['message'] = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
+        if (!preg_match('/^\d{9}$/', $batch_id)) {
+            $response['message'] = '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>';
             $response['success'] = false;
         }
 
-        if (!preg_match('/^\d{9}$/', $batch_id)) {
-            $response['message'] = '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>';
+        if ($exists) {
+            $response['message'] = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
             $response['success'] = false;
         }
 
