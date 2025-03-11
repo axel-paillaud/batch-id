@@ -12,3 +12,25 @@
  * Text Domain:       batch-id
  * Domain Path:       /languages
  */
+
+register_activation_hook(__FILE__, 'batch_id_activate');
+
+register_deactivation_hook(__FILE__, 'batch_id_deactivate');
+
+register_uninstall_hook(__FILE__, 'batch_id_uninstall');
+
+function batch_id_activate() {
+    // Activation code here
+}
+
+function batch_id_deactivate() {
+    // Deactivation code here
+}
+
+function batch_id_uninstall() {
+    // Uninstallation code here
+}
+
+function batch_id_init() {
+    // Initialization code here
+}
