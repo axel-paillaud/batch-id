@@ -54,6 +54,5 @@ function batch_id_admin_page() {
     // Fetch existing Batch IDs
     $batch_ids = $wpdb->get_results("SELECT batch_id, customer_id FROM $table_batch_ids ORDER BY id DESC");
 
-    // Inclure le template HTML
-    require_once plugin_dir_path(__FILE__) . '../templates/admin-page.php';
+    require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
 }

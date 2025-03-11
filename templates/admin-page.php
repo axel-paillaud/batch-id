@@ -1,4 +1,12 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php
+/**
+ * @var string $message
+ * @var object[] $batch_ids
+ * @var wpdb $wpdb
+ */
+
+if (!defined('ABSPATH')) exit;
+?>
 
 <div class="wrap">
     <h1><?php _e('Batch ID Settings', 'batch-id'); ?></h1>
