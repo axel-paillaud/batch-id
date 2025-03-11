@@ -26,6 +26,7 @@ function batch_id_admin_page() {
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['batch_id'])) {
         $batch_id = sanitize_text_field($_POST['batch_id']);
+        $customer_id = !empty($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
 
         // Check if the Batch ID exists
         $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
@@ -34,7 +35,10 @@ function batch_id_admin_page() {
             $message = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
         } else {
             // Insert the Batch ID
-            $wpdb->insert($table_batch_ids, ['batch_id' => $batch_id, 'customer_id' => NULL]);
+            $wpdb->insert($table_batch_ids, [
+                'batch_id' => $batch_id,
+                'customer_id' => $customer_id
+            ]);
 
             // Generate the 10 barcodes
             for ($i = 0; $i <= 9; $i++) {
