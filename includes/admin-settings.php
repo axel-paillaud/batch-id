@@ -57,7 +57,7 @@ function batch_id_admin_page() {
                 'barcode' => $barcode,
                 'batch_id' => $batch_id,
                 'is_used' => 0,
-                'customer_id' => NULL
+                'customer_id' => $customer_id
                 ]);
             }
 
