@@ -3,6 +3,7 @@
  * @var string $message
  * @var object[] $batch_ids
  * @var wpdb $wpdb
+ * @var string $table_barcodes
  */
 
 if (!defined('ABSPATH')) exit;
