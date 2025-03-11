@@ -18,49 +18,49 @@ function batch_id_add_admin_menu() {
 add_action('admin_menu', 'batch_id_add_admin_menu');
 
 function batch_id_admin_page() {
+    global $wpdb;
+    $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_barcodes = $wpdb->prefix . 'barcodes';
+    $message = '';
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['batch_id'])) {
+        $batch_id = sanitize_text_field($_POST['batch_id']);
+
+        // Check if the Batch ID exists
+        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
+
+        if ($exists) {
+            $message = '<div class="notice notice-error"><p>' . __('Ce Batch ID existe déjà.', 'batch-id') . '</p></div>';
+        } else {
+            // Insert the Batch ID
+            $wpdb->insert($table_batch_ids, ['batch_id' => $batch_id, 'customer_id' => NULL]);
+
+            // Generate the 10 barcodes
+            for ($i = 0; $i <= 9; $i++) {
+                $barcode = $batch_id . $i;
+                $wpdb->insert($table_barcodes, [
+                    'barcode' => $barcode,
+                    'batch_id' => $batch_id,
+                    'is_used' => 0,
+                    'customer_id' => NULL
+                ]);
+            }
+
+            $message = '<div class="notice notice-success"><p>' . __('Batch ID et codes-barres générés avec succès !', 'batch-id') . '</p></div>';
+        }
+    }
+
     ?>
     <div class="wrap">
         <h1><?php _e('Batch ID Settings', 'batch-id'); ?></h1>
-        <form method="post" action="options.php">
-            <?php
-            settings_fields('batch_id_options_group');
-            do_settings_sections('batch-id');
-            submit_button();
-            ?>
+
+        <?php echo $message; ?>
+
+        <form method="post">
+            <label for="batch_id"><?php _e('Saisissez un Batch ID :', 'batch-id'); ?></label>
+            <input type="text" id="batch_id" name="batch_id" required />
+            <button type="submit" class="button button-primary"><?php _e('Générer', 'batch-id'); ?></button>
         </form>
     </div>
-    <?php
-}
-
-// Register settings
-add_action('admin_init', 'batch_id_register_settings');
-
-function batch_id_register_settings() {
-    register_setting('batch_id_options_group', 'batch_id_option_name');
-
-    add_settings_section(
-        'batch_id_settings_section',
-        __('Batch ID Settings Section', 'batch-id'),
-        'batch_id_settings_section_callback',
-        'batch-id'
-    );
-
-    add_settings_field(
-        'batch_id_option_name',
-        __('Batch ID Option', 'batch-id'),
-        'batch_id_option_name_callback',
-        'batch-id',
-        'batch_id_settings_section'
-    );
-}
-
-function batch_id_settings_section_callback() {
-    echo __('Configure your Batch ID settings below:', 'batch-id');
-}
-
-function batch_id_option_name_callback() {
-    $option = get_option('batch_id_option_name');
-    ?>
-    <input type="text" name="batch_id_option_name" value="<?php echo esc_attr($option); ?>" />
     <?php
 }
