@@ -22,7 +22,10 @@ function batch_id_admin_page() {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
     $table_barcodes = $wpdb->prefix . 'barcodes';
-    $message = '';
+    $response = [
+        'success' => true,
+        'message' => ''
+    ];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['batch_id'])) {
         $batch_id = sanitize_text_field($_POST['batch_id']);
@@ -32,26 +35,34 @@ function batch_id_admin_page() {
         $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
 
         if ($exists) {
-            $message = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
-        } else {
+            $response['message'] = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
+            $response['success'] = false;
+        }
+
+        if (!preg_match('/^\d{9}$/', $batch_id)) {
+            $response['message'] = '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>';
+            $response['success'] = false;
+        }
+
+        if ($response['success']) {
             // Insert the Batch ID
             $wpdb->insert($table_batch_ids, [
-                'batch_id' => $batch_id,
-                'customer_id' => $customer_id
+            'batch_id' => $batch_id,
+            'customer_id' => $customer_id
             ]);
 
             // Generate the 10 barcodes
             for ($i = 0; $i <= 9; $i++) {
                 $barcode = $batch_id . $i;
                 $wpdb->insert($table_barcodes, [
-                    'barcode' => $barcode,
-                    'batch_id' => $batch_id,
-                    'is_used' => 0,
-                    'customer_id' => NULL
+                'barcode' => $barcode,
+                'batch_id' => $batch_id,
+                'is_used' => 0,
+                'customer_id' => NULL
                 ]);
             }
 
-            $message = '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>';
+            $response['message'] = '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>';
         }
     }
 

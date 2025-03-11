@@ -15,6 +15,9 @@ function batch_id_enqueue_admin_scripts($hook) {
 
     // Load our script JS
     wp_enqueue_script('batch-id-admin-js', $plugin_url . '../assets/js/admin.js', ['jquery', 'jquery-ui-autocomplete'], false, true);
+
+    // Load our CSS
+    wp_enqueue_style('batch-id-admin-css', $plugin_url . '../assets/css/admin.css');
 }
 
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');

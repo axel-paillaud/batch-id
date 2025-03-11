@@ -1,6 +1,6 @@
 <?php
 /**
- * @var string $message
+ * @var array $response
  * @var object[] $batch_ids
  * @var wpdb $wpdb
  * @var string $table_barcodes
@@ -12,9 +12,12 @@ if (!defined('ABSPATH')) exit;
 <div class="wrap">
     <h1><?php _e('Batch ID Settings', 'batch-id'); ?></h1>
 
-    <?php echo $message; ?>
+    <?php echo $response['message']; ?>
 
-    <form method="post">
+    <!-- TODO: create CSS class instead of inline styles -->
+    <div id="batch-id-message" style="display: none;"></div>
+
+    <form method="post" id="batch-id-form">
         <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
         <input type="text" id="batch_id" name="batch_id" required />
 
@@ -30,7 +33,7 @@ if (!defined('ABSPATH')) exit;
     <h2><?php _e('Existing Batch IDs', 'batch-id'); ?></h2>
 
     <?php if (!empty($batch_ids)) : ?>
-        <table class="widefat fixed">
+        <table id="batch-id-table" class="widefat fixed">
             <thead>
                 <tr>
                     <th><?php _e('Batch ID', 'batch-id'); ?></th>
@@ -72,8 +75,8 @@ if (!defined('ABSPATH')) exit;
                             </div>
                         </td>
                         <td>
-                            <button class="delete-batch button button-link-delete" data-batch="<?php echo esc_attr($batch->batch_id); ?>" title="<?php _e('Supprimer ce Batch ID', 'batch-id'); ?>">
-                                🗑️
+                            <button class="delete-batch button button-link-delete aw-icon-flex" data-batch="<?php echo esc_attr($batch->batch_id); ?>" title="<?php _e('Supprimer ce Batch ID', 'batch-id'); ?>">
+                                <span class="dashicons dashicons-trash"></span>
                             </button>
                         </td>
                     </tr>

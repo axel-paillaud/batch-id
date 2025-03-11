@@ -55,11 +55,27 @@ jQuery(document).ready(function($) {
         success: function(response) {
           if (response.success) {
             row.fadeOut("fast", function() { $(this).remove(); });
+            showBatchIdMessage("✅ " + response.data, "success");
           } else {
-            alert("Erreur lors de la suppression : " + response.data);
+            showBatchIdMessage("❌ " + response.data, "error");
           }
+        },
+        error: function() {
+          showBatchIdMessage("❌ Une erreur est survenue.", "error");
         }
       });
     }
   });
+
+  function showBatchIdMessage(message, type) {
+      let msgDiv = $("#batch-id-message");
+      msgDiv.text(message)
+          .removeClass("success error")
+          .addClass(type)
+          .fadeIn();
+
+      setTimeout(function() {
+          msgDiv.fadeOut();
+      }, 4000);
+  }
 });
