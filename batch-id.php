@@ -18,6 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once plugin_dir_path(__FILE__) . 'includes/db-install.php';
+require_once plugin_dir_path(__FILE__) . 'includes/db-uninstall.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/front-display.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hooks.php';
@@ -27,23 +28,10 @@ function batch_id_load_textdomain() {
 }
 add_action('plugins_loaded', 'batch_id_load_textdomain');
 
-register_activation_hook(__FILE__, 'batch_id_activate');
+// Hook to create tables on plugin activation
+register_activation_hook(__FILE__, 'batch_id_create_tables');
 
-register_deactivation_hook(__FILE__, 'batch_id_deactivate');
-
-register_uninstall_hook(__FILE__, 'batch_id_uninstall');
-
-function batch_id_activate() {
-    // Activation code here
-}
-
-function batch_id_deactivate() {
-    // Deactivation code here
-}
-
-function batch_id_uninstall() {
-    // Uninstallation code here
-}
+register_uninstall_hook(__FILE__, 'batch_id_remove_tables');
 
 function batch_id_init() {
     // Initialization code here
