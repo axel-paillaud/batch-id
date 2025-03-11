@@ -30,7 +30,7 @@ function batch_id_admin_page() {
         $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
 
         if ($exists) {
-            $message = '<div class="notice notice-error"><p>' . __('Ce Batch ID existe déjà.', 'batch-id') . '</p></div>';
+            $message = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
         } else {
             // Insert the Batch ID
             $wpdb->insert($table_batch_ids, ['batch_id' => $batch_id, 'customer_id' => NULL]);
@@ -46,9 +46,12 @@ function batch_id_admin_page() {
                 ]);
             }
 
-            $message = '<div class="notice notice-success"><p>' . __('Batch ID et codes-barres générés avec succès !', 'batch-id') . '</p></div>';
+            $message = '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>';
         }
     }
+
+    // Fetch existing Batch IDs
+    $batch_ids = $wpdb->get_results("SELECT batch_id FROM $table_batch_ids ORDER BY id DESC");
 
     ?>
     <div class="wrap">
@@ -57,10 +60,68 @@ function batch_id_admin_page() {
         <?php echo $message; ?>
 
         <form method="post">
-            <label for="batch_id"><?php _e('Saisissez un Batch ID :', 'batch-id'); ?></label>
+            <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
             <input type="text" id="batch_id" name="batch_id" required />
-            <button type="submit" class="button button-primary"><?php _e('Générer', 'batch-id'); ?></button>
+            <button type="submit" class="button button-primary"><?php _e('Generate', 'batch-id'); ?></button>
         </form>
+
+        <hr>
+
+        <h2><?php _e('Existing Batch IDs', 'batch-id'); ?></h2>
+
+        <?php if (!empty($batch_ids)) : ?>
+            <table class="widefat fixed">
+                <thead>
+                    <tr>
+                        <th><?php _e('Batch ID', 'batch-id'); ?></th>
+                        <th><?php _e('Barcodes', 'batch-id'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($batch_ids as $batch) : ?>
+                        <tr>
+                            <td><?php echo esc_html($batch->batch_id); ?></td>
+                            <td>
+                                <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch->batch_id); ?>">
+                                    <?php _e('Voir les barcodes', 'batch-id'); ?>
+                                </button>
+                                <div class="barcodes-list" data-batch="<?php echo esc_attr($batch->batch_id); ?>" style="display:none;">
+                                    <ul>
+                                        <?php
+                                        $barcodes = $wpdb->get_results($wpdb->prepare("SELECT barcode FROM $table_barcodes WHERE batch_id = %s", $batch->batch_id));
+                                        foreach ($barcodes as $barcode) {
+                                            echo '<li>' . esc_html($barcode->barcode) . '</li>';
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <p><?php _e('Aucun Batch ID généré.', 'batch-id'); ?></p>
+        <?php endif; ?>
     </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".toggle-barcodes").forEach(button => {
+            button.addEventListener("click", function() {
+                let batchId = this.getAttribute("data-batch");
+                let barcodeList = document.querySelector(".barcodes-list[data-batch='" + batchId + "']");
+                if (barcodeList.style.display === "none") {
+                    barcodeList.style.display = "block";
+                    this.textContent = "<?php _e('Masquer les barcodes', 'batch-id'); ?>";
+                } else {
+                    barcodeList.style.display = "none";
+                    this.textContent = "<?php _e('Voir les barcodes', 'batch-id'); ?>";
+                }
+            });
+        });
+    });
+    </script>
+
     <?php
 }
