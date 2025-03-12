@@ -6,20 +6,24 @@
 }
 
 .batch-column {
+    color: #041232;
     width: 150px;
-    background: #f8f8f8;
+    background: #ebf5f7;
     border: 1px solid #ccc;
-    padding: 10px;
     text-align: center;
 }
 
 .batch-header {
     font-weight: bold;
-    background: #ddd;
-    padding: 5px;
+    background: #b5d5dd;
+    padding: 8px;
 }
 
 .barcode {
-    padding: 3px;
+    padding: 8px;
     font-size: 14px;
+}
+
+.barcode.used {
+    text-decoration: line-through;
 }
