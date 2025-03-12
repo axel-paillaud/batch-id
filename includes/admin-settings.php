@@ -65,8 +65,22 @@ function batch_id_admin_page() {
         }
     }
 
-    // Fetch existing Batch IDs
-    $batch_ids = $wpdb->get_results("SELECT batch_id, customer_id FROM $table_batch_ids ORDER BY id DESC");
+    // Pagination
+    $batch_per_page = 10;
+    $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $offset = ($current_page - 1) * $batch_per_page;
+
+    $total_batches = $wpdb->get_var("SELECT COUNT(*) FROM $table_batch_ids");
+
+    // Calculate the total number of pages
+    $total_pages = ceil($total_batches / $batch_per_page);
+
+    // Retrieve the Batch ID for the current page
+    $batch_ids = $wpdb->get_results($wpdb->prepare(
+        "SELECT batch_id, customer_id FROM $table_batch_ids ORDER BY id DESC LIMIT %d OFFSET %d",
+        $batch_per_page,
+        $offset
+    ));
 
     require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
 }

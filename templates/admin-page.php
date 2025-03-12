@@ -4,6 +4,8 @@
  * @var object[] $batch_ids
  * @var wpdb $wpdb
  * @var string $table_barcodes
+ * @var int $total_pages
+ * @var int $current_page
  */
 
 if (!defined('ABSPATH')) exit;
@@ -83,6 +85,28 @@ if (!defined('ABSPATH')) exit;
                 <?php endforeach; ?>
             </tbody>
         </table>
+
+        <!-- Next and previous buttons -->
+        <div class="tablenav">
+            <div class="tablenav-pages">
+                <?php if ($total_pages > 1) : ?>
+                    <span class="pagination-links">
+                        <?php if ($current_page > 1) : ?>
+                            <a class="prev-page button" href="<?php echo esc_url(add_query_arg('paged', $current_page - 1)); ?>">&larr; <?php _e('Précédent', 'batch-id'); ?></a>
+                        <?php endif; ?>
+
+                        <span class="paging-input">
+                            <?php printf(__('Page %d sur %d', 'batch-id'), $current_page, $total_pages); ?>
+                        </span>
+
+                        <?php if ($current_page < $total_pages) : ?>
+                            <a class="next-page button" href="<?php echo esc_url(add_query_arg('paged', $current_page + 1)); ?>"><?php _e('Suivant', 'batch-id'); ?> &rarr;</a>
+                        <?php endif; ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
+
     <?php else : ?>
         <p><?php _e('No Batch IDs generated.', 'batch-id'); ?></p>
     <?php endif; ?>
