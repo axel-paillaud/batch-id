@@ -20,19 +20,26 @@ function batch_id_display_front_page() {
         $user_id
     ));
 
-    // Load barcodes for each Batch ID
     $batch_data = [];
     foreach ($batch_ids as $batch) {
-        $barcodes = $wpdb->get_col($wpdb->prepare(
-            "SELECT barcode FROM $table_barcodes WHERE batch_id = %s ORDER BY barcode ASC",
+        $barcodes = $wpdb->get_results($wpdb->prepare(
+            "SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s ORDER BY barcode ASC",
             $batch->batch_id
         ));
-        $batch_data[] = [
-            'batch_id' => $batch->batch_id,
-            'barcodes' => $barcodes
-        ];
+
+        // Check if all barcodes are used
+        $all_used = array_reduce($barcodes, function($carry, $item) {
+            return $carry && ($item->is_used == 1);
+        }, true);
+
+        // If all barcodes are used, don't add it
+        if (!$all_used) {
+            $batch_data[] = [
+                'batch_id' => $batch->batch_id,
+                'barcodes' => $barcodes
+            ];
+        }
     }
 
-    // Load the view and pass the data
     require plugin_dir_path(__FILE__) . '../templates/front-page.php';
 }
