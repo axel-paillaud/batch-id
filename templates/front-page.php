@@ -14,8 +14,13 @@ if (!defined('ABSPATH')) exit;
             <div class="batch-column">
                 <div class="batch-header"><?php echo esc_html("Batch ID " . $batch['batch_id']); ?></div>
                 <?php foreach ($batch['barcodes'] as $barcode) : ?>
-                    <div class="barcode <?php echo $barcode->is_used ? 'used' : ''; ?>">
-                        <?php echo esc_html($barcode->barcode); ?>
+                    <div class="barcode-container">
+                        <div class="barcode-code <?php echo $barcode->is_used ? 'used' : ''; ?>">
+                            <?php echo esc_html($barcode->barcode); ?>
+                        </div>
+                        <div class="barcode <?php echo $barcode->is_used ? 'used' : ''; ?>">
+                            <?php echo esc_html($barcode->barcode); ?>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>

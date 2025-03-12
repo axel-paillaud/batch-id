@@ -1,29 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap');
+
+
 .batch-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    gap: 28px;
+    justify-content: flex-start;
 }
 
 .batch-column {
     color: #041232;
-    width: 150px;
     background: #ebf5f7;
     border: 1px solid #ccc;
     text-align: center;
 }
 
+.batch-column > .barcode-container:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+
 .batch-header {
     font-weight: bold;
     background: #b5d5dd;
-    padding: 8px;
+    padding: 16px;
 }
 
 .barcode {
-    padding: 8px;
+    font-family: Consolas, Menlo, Monaco, DejaVu Sans Mono, Courier New, monospace;
+    padding: 0 16px 8px 16px;
+    padding-bottom: 8px;
     font-size: 14px;
+    letter-spacing: 5px;
 }
 
-.barcode.used {
+.barcode-code {
+    font-family: 'Libre Barcode 128', cursive;
+    padding: 8px 16px 0 16px;
+    font-size: 40px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.barcode.used, .barcode-code.used {
     text-decoration: line-through;
 }
