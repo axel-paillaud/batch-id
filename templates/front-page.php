@@ -1,12 +1,16 @@
 <?php
 /**
  * @var object[] $batch_data
+ * @var int $total_batches
  */
 
 if (!defined('ABSPATH')) exit;
 ?>
 
-<h2 class="batch-id-title">Your available barcodes</h2>
+<div class="batch-id-title">
+    <h2>Your available barcodes</h2>
+    <p><?php echo $total_batches; ?> batch ID</p>
+</div>
 
 <?php if (!empty($batch_data)) : ?>
     <div class="batch-container">

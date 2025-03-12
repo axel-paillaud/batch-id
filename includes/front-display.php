@@ -41,5 +41,7 @@ function batch_id_display_front_page() {
         }
     }
 
+    $total_batches = count($batch_data);
+
     require plugin_dir_path(__FILE__) . '../templates/front-page.php';
 }
