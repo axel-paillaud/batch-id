@@ -36,10 +36,8 @@ add_action('init', function() {
 });
 
 // Handle the display of content on the "Batch ID" tab
-add_action('woocommerce_account_batch-id_endpoint', function() {
-    echo '<h2>🔢 Your Batch ID</h2>';
-    echo '<p>Dynamic content here ...</p>';
-});
+add_action('woocommerce_account_batch-id_endpoint', 'batch_id_display_front_page');
+
 
 function batch_id_search_customers() {
     global $wpdb;
