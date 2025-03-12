@@ -82,5 +82,32 @@ function batch_id_admin_page() {
         $offset
     ));
 
+    // Prefill batch ID field with the next available ID
+    // Ex: 2503 for March 2025
+    $batch_prefix = date('y') . date('m');
+
+    $last_batch_id = $wpdb->get_var("SELECT batch_id FROM {$table_batch_ids} ORDER BY id DESC LIMIT 1");
+
+    if ($last_batch_id && preg_match('/^(\d{4})(\d{5})$/', $last_batch_id, $matches)) {
+        // Year + month (ex: 2503)
+        $last_prefix = $matches[1];
+        // Numeric part (ex: 00034)
+        $last_number = intval($matches[2]);
+
+        // Check if the last Batch ID matches the current month/year
+        if ($last_prefix === $batch_prefix) {
+            // Increment and keep 5 digits
+            $next_number = str_pad($last_number + 1, 5, '0', STR_PAD_LEFT);
+        } else {
+            // Restart at 00000
+            $next_number = '00000';
+        }
+    } else {
+        // No data in the database, start at 00000
+        $next_number = '00000';
+    }
+
+    $next_batch_id = $batch_prefix . $next_number;
+
     require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
 }

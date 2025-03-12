@@ -6,6 +6,7 @@
  * @var string $table_barcodes
  * @var int $total_pages
  * @var int $current_page
+ * @var string $next_batch_id
  */
 
 if (!defined('ABSPATH')) exit;
@@ -16,12 +17,11 @@ if (!defined('ABSPATH')) exit;
 
     <?php echo $response['message']; ?>
 
-    <!-- TODO: create CSS class instead of inline styles -->
     <div id="batch-id-message" style="display: none;"></div>
 
     <form method="post" id="batch-id-form">
         <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
-        <input type="text" id="batch_id" name="batch_id" required />
+        <input type="text" id="batch_id" name="batch_id" value="<?php echo esc_attr($next_batch_id); ?>" maxlength="9" required />
 
         <label for="customer"><?php _e('Associate a customer (optional):', 'batch-id'); ?></label>
         <input type="text" id="customer" name="customer" placeholder="Search customer..." />
