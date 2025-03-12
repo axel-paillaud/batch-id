@@ -11,6 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       batch-id
  * Domain Path:       /languages
+ * Requires Plugins:  woocommerce
  */
 
 if (!defined('ABSPATH')) {

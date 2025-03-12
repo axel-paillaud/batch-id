@@ -22,6 +22,25 @@ function batch_id_enqueue_admin_scripts($hook) {
 
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');
 
+
+// Add a new "Batch ID" tab in My Account
+add_filter('woocommerce_account_menu_items', 'batch_id_add_account_tab', 40);
+function batch_id_add_account_tab($items) {
+    $items['batch-id'] = __('Batch ID', 'batch-id'); // Add the tab
+    return $items;
+}
+
+// Declare the "batch-id" endpoint for WooCommerce
+add_action('init', function() {
+    add_rewrite_endpoint('batch-id', EP_ROOT | EP_PAGES);
+});
+
+// Handle the display of content on the "Batch ID" tab
+add_action('woocommerce_account_batch-id_endpoint', function() {
+    echo '<h2>🔢 Your Batch ID</h2>';
+    echo '<p>Dynamic content here ...</p>';
+});
+
 function batch_id_search_customers() {
     global $wpdb;
     $search_term = isset($_GET['term']) ? sanitize_text_field($_GET['term']) : '';
