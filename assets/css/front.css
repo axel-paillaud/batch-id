@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap');
 
+.batch-id-title {
+    font-weight: bold;
+    margin-bottom: 24px;
+}
 
 .batch-container {
     display: flex;

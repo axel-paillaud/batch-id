@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 ?>
 
-<h2>Your available barcodes</h2>
+<h2 class="batch-id-title">Your available barcodes</h2>
 
 <?php if (!empty($batch_data)) : ?>
     <div class="batch-container">
