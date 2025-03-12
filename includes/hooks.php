@@ -10,18 +10,19 @@ function batch_id_enqueue_admin_scripts($hook) {
 
     $plugin_url = plugin_dir_url(__FILE__);
 
-    // Load jQuery UI Autocomplete
     wp_enqueue_script('jquery-ui-autocomplete');
 
-    // Load our script JS
     wp_enqueue_script('batch-id-admin-js', $plugin_url . '../assets/js/admin.js', ['jquery', 'jquery-ui-autocomplete'], false, true);
 
-    // Load our CSS
     wp_enqueue_style('batch-id-admin-css', $plugin_url . '../assets/css/admin.css');
 }
 
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');
 
+function batch_id_enqueue_front_styles() {
+    wp_enqueue_style('batch-id-front-css', plugin_dir_url(__FILE__) . '../assets/css/front.css');
+}
+add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 
 // Add a new "Batch ID" tab in My Account
 add_filter('woocommerce_account_menu_items', 'batch_id_add_account_tab', 40);

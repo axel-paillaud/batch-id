@@ -1,26 +1,38 @@
-
 <?php
 if (!defined('ABSPATH')) {
     exit;
 }
 
 function batch_id_display_front_page() {
-    // Charger l'utilisateur connecté
     $user_id = get_current_user_id();
     if (!$user_id) {
-        echo '<p>' . __('Vous devez être connecté pour voir vos Batch ID.', 'batch-id') . '</p>';
+        echo '<p>' . __('You must be logged in to view your Batch IDs.', 'batch-id') . '</p>';
         return;
     }
 
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_barcodes = $wpdb->prefix . 'barcodes';
 
-    // Charger des données de test (Batch ID liés au client connecté)
+    // Load Batch IDs linked to the user
     $batch_ids = $wpdb->get_results($wpdb->prepare(
         "SELECT batch_id FROM $table_batch_ids WHERE customer_id = %d ORDER BY id DESC",
         $user_id
     ));
 
-    // Charger la vue et lui passer les données
+    // Load barcodes for each Batch ID
+    $batch_data = [];
+    foreach ($batch_ids as $batch) {
+        $barcodes = $wpdb->get_col($wpdb->prepare(
+            "SELECT barcode FROM $table_barcodes WHERE batch_id = %s ORDER BY barcode ASC",
+            $batch->batch_id
+        ));
+        $batch_data[] = [
+            'batch_id' => $batch->batch_id,
+            'barcodes' => $barcodes
+        ];
+    }
+
+    // Load the view and pass the data
     require plugin_dir_path(__FILE__) . '../templates/front-page.php';
 }

@@ -1,13 +1,24 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php
+/**
+ * @var object[] $batch_data
+ */
+
+if (!defined('ABSPATH')) exit;
+?>
 
 <h2>Your barcodes</h2>
 
-<?php if (!empty($batch_ids)) : ?>
-    <ul>
-        <?php foreach ($batch_ids as $batch) : ?>
-            <li><?php echo esc_html($batch->batch_id); ?></li>
+<?php if (!empty($batch_data)) : ?>
+    <div class="batch-container">
+        <?php foreach ($batch_data as $batch) : ?>
+            <div class="batch-column">
+                <div class="batch-header"><?php echo esc_html("Batch ID " . $batch['batch_id']); ?></div>
+                <?php foreach ($batch['barcodes'] as $barcode) : ?>
+                    <div class="barcode"><?php echo esc_html($barcode); ?></div>
+                <?php endforeach; ?>
+            </div>
         <?php endforeach; ?>
-    </ul>
+    </div>
 <?php else : ?>
     <p>Batch ID not found.</p>
 <?php endif; ?>
