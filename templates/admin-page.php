@@ -20,11 +20,15 @@ if (!defined('ABSPATH')) exit;
     <div id="batch-id-message" style="display: none;"></div>
 
     <form method="post" id="batch-id-form">
-        <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
-        <input type="text" id="batch_id" name="batch_id" value="<?php echo esc_attr($next_batch_id); ?>" maxlength="9" required />
+        <div>
+            <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
+            <input type="text" id="batch_id" name="batch_id" value="<?php echo esc_attr($next_batch_id); ?>" maxlength="9" required />
+        </div>
 
-        <label for="customer"><?php _e('Associate a customer (optional):', 'batch-id'); ?></label>
-        <input type="text" id="customer" name="customer" placeholder="Search customer..." />
+        <div>
+            <label for="customer"><?php _e('Associate a customer (optional):', 'batch-id'); ?></label>
+            <input type="text" id="customer" name="customer" placeholder="Search customer..." />
+        </div>
         <input type="hidden" id="customer_id" name="customer_id" />
 
         <button type="submit" class="button button-primary"><?php _e('Generate', 'batch-id'); ?></button>
@@ -69,7 +73,7 @@ if (!defined('ABSPATH')) exit;
                                     <?php
                                     $barcodes = $wpdb->get_results($wpdb->prepare("SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s", $batch->batch_id));
                                     foreach ($barcodes as $barcode) {
-                                        $barcode_style = ($barcode->is_used == 1) ? 'style="text-decoration: line-through; color: red;"' : '';
+                                        $barcode_style = ($barcode->is_used == 1) ? 'class="used"' : '';
                                         echo '<li ' . $barcode_style . '>' . esc_html($barcode->barcode) . '</li>';
                                     }
                                     ?>
