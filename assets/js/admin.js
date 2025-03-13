@@ -39,34 +39,6 @@ jQuery(document).ready(function($) {
     }
   });
 
-  // Handle delete batch ID
-  $(".delete-batch").click(function() {
-    let batchId = $(this).data("batch");
-    let row = $(this).closest("tr");
-
-    if (confirm("Voulez-vous vraiment supprimer ce Batch ID et tous ses barcodes ?")) {
-      $.ajax({
-        url: ajaxurl,
-        type: "POST",
-        data: {
-          action: "batch_id_delete",
-          batch_id: batchId
-        },
-        success: function(response) {
-          if (response.success) {
-            row.fadeOut("fast", function() { $(this).remove(); });
-            showBatchIdMessage("✅ " + response.data, "success");
-          } else {
-            showBatchIdMessage("❌ " + response.data, "error");
-          }
-        },
-        error: function() {
-          showBatchIdMessage("❌ Une erreur est survenue.", "error");
-        }
-      });
-    }
-  });
-
   function showBatchIdMessage(message, type) {
       let msgDiv = $("#batch-id-message");
       msgDiv.text(message)
