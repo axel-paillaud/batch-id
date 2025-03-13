@@ -7,6 +7,7 @@
  * @var int $total_pages
  * @var int $current_page
  * @var string $next_batch_id
+ * @var int $total_batches
  */
 
 if (!defined('ABSPATH')) exit;
@@ -36,7 +37,10 @@ if (!defined('ABSPATH')) exit;
 
     <hr>
 
-    <h2><?php _e('Existing Batch IDs', 'batch-id'); ?></h2>
+    <div class="batch-id-existing">
+        <h2><?php _e('Existing Batch IDs', 'batch-id'); ?></h2>
+        <p><?= '(' . $total_batches . ' in total)'; ?></p>
+    </div>
 
     <?php if (!empty($batch_ids)) : ?>
         <table id="batch-id-table" class="widefat fixed">

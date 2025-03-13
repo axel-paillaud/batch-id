@@ -71,19 +71,19 @@ function batch_id_delete() {
     $batch_id = isset($_POST['batch_id']) ? sanitize_text_field($_POST['batch_id']) : '';
 
     if (empty($batch_id)) {
-        wp_send_json_error("Batch ID invalide.");
+        wp_send_json_error("Batch ID invalid.");
     }
 
     $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}batch_ids WHERE batch_id = %s", $batch_id));
 
     if (!$exists) {
-        wp_send_json_error("Le Batch ID n'existe pas.");
+        wp_send_json_error("The Batch ID does not exist.");
     }
 
     // Delete the Batch ID (the barcodes are deleted in cascade)
     $wpdb->delete("{$wpdb->prefix}batch_ids", ['batch_id' => $batch_id]);
 
-    wp_send_json_success("Batch ID supprimé.");
+    wp_send_json_success("Batch ID deleted.");
 }
 
 add_action('wp_ajax_batch_id_delete', 'batch_id_delete');

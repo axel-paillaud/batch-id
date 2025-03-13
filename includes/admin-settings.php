@@ -66,7 +66,7 @@ function batch_id_admin_page() {
     }
 
     // Pagination
-    $batch_per_page = 10;
+    $batch_per_page = 13;
     $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
     $offset = ($current_page - 1) * $batch_per_page;
 

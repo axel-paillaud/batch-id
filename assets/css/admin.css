@@ -26,6 +26,12 @@
     align-items: center;
 }
 
+.batch-id-existing {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .barcodes-list ul > li {
     font-family: Consolas, Menlo, Monaco, DejaVu Sans Mono, Courier New, monospace;
 }
