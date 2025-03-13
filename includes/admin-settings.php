@@ -63,6 +63,18 @@ function batch_id_admin_page() {
 
             $response['message'] = '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>';
         }
+    } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_batch_id'])) {
+        // Process Batch ID deletion
+        $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
+
+        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table_batch_ids} WHERE batch_id = %s", $batch_id_to_delete));
+
+        if ($exists) {
+            $wpdb->delete($table_batch_ids, ['batch_id' => $batch_id_to_delete]);
+            $response['message'] = '<div class="notice notice-success"><p>' . __('Batch ID deleted successfully.', 'batch-id') . '</p></div>';
+        } else {
+            $response['message'] = '<div class="notice notice-error"><p>' . __('This Batch ID does not exist.', 'batch-id') . '</p></div>';
+        }
     }
 
     // Pagination

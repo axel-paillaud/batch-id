@@ -21,6 +21,14 @@
     border: 1px solid #f5c6cb;
 }
 
+#batch-id-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#batch-id-table tbody > tr > td {
+    line-height: 2.15;
+}
+
 #batch-id-table .aw-icon-flex {
     display: flex;
     align-items: center;
@@ -29,7 +37,7 @@
 .batch-id-existing {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .barcodes-list ul > li {

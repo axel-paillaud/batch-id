@@ -85,9 +85,12 @@ if (!defined('ABSPATH')) exit;
                             </div>
                         </td>
                         <td>
-                            <button class="delete-batch button button-link-delete aw-icon-flex" data-batch="<?php echo esc_attr($batch->batch_id); ?>" title="<?php _e('Supprimer ce Batch ID', 'batch-id'); ?>">
-                                <span class="dashicons dashicons-trash"></span>
-                            </button>
+                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this Batch ID?');">
+                                <input type="hidden" name="delete_batch_id" value="<?php echo esc_attr($batch->batch_id); ?>" />
+                                <button type="submit" class="button button-link-delete aw-icon-flex">
+                                    <span class="dashicons dashicons-trash"></span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
