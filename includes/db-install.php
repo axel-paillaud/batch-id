@@ -1,4 +1,3 @@
-
 <?php
 
 if (!defined('ABSPATH')) {
@@ -15,6 +14,7 @@ function batch_id_create_tables() {
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         batch_id VARCHAR(20) NOT NULL UNIQUE,
         customer_id BIGINT(20) UNSIGNED DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         INDEX (batch_id),
         INDEX (customer_id)
