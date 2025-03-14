@@ -65,3 +65,24 @@ function batch_id_search_customers() {
 }
 
 add_action('wp_ajax_batch_id_search_customers', 'batch_id_search_customers');
+
+// Add batch ID on back-office user page
+function batch_id_display_user_batches($user) {
+    if (!current_user_can('edit_users')) {
+        return;
+    }
+
+    global $wpdb;
+    $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_barcodes = $wpdb->prefix . 'barcodes';
+
+    // Retrieve Batch IDs assigned to this user
+    $batch_ids = $wpdb->get_results($wpdb->prepare(
+        "SELECT batch_id FROM $table_batch_ids WHERE customer_id = %d ORDER BY created_at DESC",
+        $user->ID
+    ));
+
+    require plugin_dir_path(__FILE__) . '../templates/user-batch-ids.php';
+}
+add_action('show_user_profile', 'batch_id_display_user_batches');
+add_action('edit_user_profile', 'batch_id_display_user_batches');
