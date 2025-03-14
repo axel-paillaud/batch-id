@@ -15,6 +15,7 @@ function batch_id_create_tables() {
         batch_id VARCHAR(20) NOT NULL UNIQUE,
         customer_id BIGINT(20) UNSIGNED DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         INDEX (batch_id),
         INDEX (customer_id)
