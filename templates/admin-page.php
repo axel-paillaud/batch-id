@@ -55,7 +55,7 @@ if (!defined('ABSPATH')) exit;
             <tbody>
                 <?php foreach ($batch_ids as $batch) :
                     $unused_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0", $batch->batch_id));
-                    $batch_style = ($unused_count == 0) ? 'style="text-decoration: line-through; color: red;"' : '';
+                    $batch_style = ($unused_count == 0) ? 'used' : '';
 
                     $customer_name = 'Non attribué';
                     if (!is_null($batch->customer_id)) {
@@ -66,7 +66,7 @@ if (!defined('ABSPATH')) exit;
                     }
                 ?>
                     <tr>
-                        <td <?php echo $batch_style; ?>><?php echo esc_html($batch->batch_id); ?></td>
+                        <td class="<?php echo $batch_style; ?>"><?php echo esc_html($batch->batch_id); ?></td>
                         <td><?php echo $customer_name; ?></td>
                         <td>
                             <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch->batch_id); ?>">

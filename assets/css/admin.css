@@ -47,3 +47,8 @@
 .barcodes-list ul > li.used {
    text-decoration: line-through;
 }
+
+#batch-id-table tbody tr td.used {
+    color: #9f0404;
+    text-decoration: line-through;
+}

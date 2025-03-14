@@ -11,9 +11,12 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($batch_ids as $batch) : ?>
+            <?php foreach ($batch_ids as $batch) :
+                $unused_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0", $batch->batch_id));
+                $batch_style = ($unused_count == 0) ? 'used' : '';
+            ?>
                 <tr>
-                    <td><?php echo esc_html($batch->batch_id); ?></td>
+                    <td class="<?php echo $batch_style; ?>"><?php echo esc_html($batch->batch_id); ?></td>
                     <td>
                         <button
                             class="toggle-barcodes button"
@@ -26,11 +29,13 @@
                             <ul>
                                 <?php
                                 $barcodes = $wpdb->get_results($wpdb->prepare(
-                                    "SELECT barcode FROM {$table_barcodes} WHERE batch_id = %s",
+                                    "SELECT barcode, is_used FROM {$table_barcodes} WHERE batch_id = %s",
                                     $batch->batch_id
                                 ));
+
                                 foreach ($barcodes as $barcode) {
-                                    echo '<li>' . esc_html($barcode->barcode) . '</li>';
+                                    $barcode_class = ($barcode->is_used == 1) ? 'class="used"' : '';
+                                    echo '<li ' . $barcode_class . '>' . esc_html($barcode->barcode) . '</li>';
                                 }
                                 ?>
                             </ul>
