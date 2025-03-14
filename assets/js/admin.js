@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".toggle-barcodes").forEach(button => {
         button.addEventListener("click", function() {

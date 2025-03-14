@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 }
 
 function batch_id_enqueue_admin_scripts($hook) {
-    if ($hook !== 'toplevel_page_batch-id-settings') {
+    if ($hook !== 'toplevel_page_batch-id-settings' && $hook !== 'user-edit.php' && $hook !== 'profile.php') {
         return;
     }
 
