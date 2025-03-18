@@ -35,7 +35,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     }
 
     // Get batch type
-    $type_prefix = $wpdb->get_var($wpdb->prepare("SELECT prefix FROM $table_batch_types WHERE id = %d", $type_id));
+    $type_prefix = $wpdb->get_var($wpdb->prepare("SELECT prefix FROM $table_batch_types WHERE prefix = %d", $type_id));
 
     if (!$type_prefix) {
         return [
