@@ -1,13 +1,11 @@
 <?php
 /**
+ * @var array $batch_info
  * @var array $response
  * @var object[] $batch_ids
- * @var wpdb $wpdb
- * @var string $table_barcodes
  * @var int $total_pages
  * @var int $current_page
  * @var string $next_batch_id
- * @var int $total_batches
  */
 
 if (!defined('ABSPATH')) exit;
@@ -39,10 +37,10 @@ if (!defined('ABSPATH')) exit;
 
     <div class="batch-id-existing">
         <h2><?php _e('Existing Batch IDs', 'batch-id'); ?></h2>
-        <p><?= '(' . $total_batches . ' in total)'; ?></p>
+        <p><?= '(' . $batch_info['total_batches'] . ' in total)'; ?></p>
     </div>
 
-    <?php if (!empty($batch_ids)) : ?>
+    <?php if (!empty($batch_info['batches'])) : ?>
         <table id="batch-id-table" class="widefat fixed">
             <thead>
                 <tr>
@@ -53,41 +51,28 @@ if (!defined('ABSPATH')) exit;
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($batch_ids as $batch) :
-                    $unused_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0", $batch->batch_id));
-                    $batch_style = ($unused_count == 0) ? 'used' : '';
-
-                    $customer_name = 'Non attribué';
-                    if (!is_null($batch->customer_id)) {
-                        $customer_data = get_userdata($batch->customer_id);
-                        if ($customer_data) {
-                            $customer_name = '<a href="' . esc_url(admin_url("user-edit.php?user_id=" . $batch->customer_id)) . '" target="_blank">' . esc_html($customer_data->display_name) . '</a>';
-                        }
-                    }
-                ?>
+                <?php foreach ($batch_info['batches'] as $batch) : ?>
                     <tr>
-                        <td class="<?php echo $batch_style; ?>"><?php echo esc_html($batch->batch_id); ?></td>
-                        <td><?php echo $customer_name; ?></td>
+                        <td class="<?php echo $batch['is_fully_used'] ? 'used' : ''; ?>"><?php echo esc_html($batch['batch_id']); ?></td>
+                        <td><?php echo $batch['customer_name']; ?></td>
                         <td>
-                            <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch->batch_id); ?>">
+                            <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch['batch_id']); ?>">
                                 <?php _e('Voir les barcodes', 'batch-id'); ?>
                             </button>
-                            <div class="barcodes-list" data-batch="<?php echo esc_attr($batch->batch_id); ?>" style="display:none;">
+                            <div class="barcodes-list" data-batch="<?php echo esc_attr($batch['batch_id']); ?>" style="display:none;">
                                 <ul>
-                                    <?php
-                                    $barcodes = $wpdb->get_results($wpdb->prepare("SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s", $batch->batch_id));
-                                    foreach ($barcodes as $barcode) {
-                                        $barcode_style = ($barcode->is_used == 1) ? 'class="used"' : '';
-                                        echo '<li ' . $barcode_style . '>' . esc_html($barcode->barcode) . '</li>';
-                                    }
-                                    ?>
+                                    <?php foreach ($batch['barcodes'] as $barcode) : ?>
+                                        <li class="<?php echo ($barcode->is_used == 1) ? 'used' : ''; ?>">
+                                            <?php echo esc_html($barcode->barcode); ?>
+                                        </li>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         </td>
                         <td>
                             <form method="post" onsubmit="return confirm('Are you sure you want to delete this Batch ID?');">
-                                <input type="hidden" name="delete_batch_id" value="<?php echo esc_attr($batch->batch_id); ?>" />
-                                <button type="submit" class="button button-link-delete aw-icon-flex">
+                                <input type="hidden" name="delete_batch_id" value="<?php echo esc_attr($batch['batch_id']); ?>" />
+                                <button type="submit" class="button button-link-delete">
                                     <span class="dashicons dashicons-trash"></span>
                                 </button>
                             </form>
@@ -100,18 +85,18 @@ if (!defined('ABSPATH')) exit;
         <!-- Next and previous buttons -->
         <div class="tablenav">
             <div class="tablenav-pages">
-                <?php if ($total_pages > 1) : ?>
+                <?php if ($batch_info['total_pages'] > 1) : ?>
                     <span class="pagination-links">
-                        <?php if ($current_page > 1) : ?>
-                            <a class="prev-page button" href="<?php echo esc_url(add_query_arg('paged', $current_page - 1)); ?>">&larr; <?php _e('Précédent', 'batch-id'); ?></a>
+                        <?php if ($batch_info['current_page'] > 1) : ?>
+                            <a class="prev-page button" href="<?php echo esc_url(add_query_arg('paged', $batch_info['current_page'] - 1)); ?>">&larr; <?php _e('Précédent', 'batch-id'); ?></a>
                         <?php endif; ?>
 
                         <span class="paging-input">
-                            <?php printf(__('Page %d sur %d', 'batch-id'), $current_page, $total_pages); ?>
+                            <?php printf(__('Page %d sur %d', 'batch-id'), $batch_info['current_page'], $batch_info['total_pages']); ?>
                         </span>
 
-                        <?php if ($current_page < $total_pages) : ?>
-                            <a class="next-page button" href="<?php echo esc_url(add_query_arg('paged', $current_page + 1)); ?>"><?php _e('Suivant', 'batch-id'); ?> &rarr;</a>
+                        <?php if ($batch_info['current_page'] < $batch_info['total_pages']) : ?>
+                            <a class="next-page button" href="<?php echo esc_url(add_query_arg('paged', $batch_info['current_page'] + 1)); ?>"><?php _e('Suivant', 'batch-id'); ?> &rarr;</a>
                         <?php endif; ?>
                     </span>
                 <?php endif; ?>
