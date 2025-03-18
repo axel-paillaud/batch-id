@@ -16,8 +16,6 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
     $table_barcodes = $wpdb->prefix . 'barcodes';
 
-    $response = ['success' => true, 'message' => ''];
-
     // Validate Batch ID format
     if (!preg_match('/^\d{9}$/', $batch_id)) {
         return [
