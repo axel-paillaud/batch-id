@@ -1,8 +1,6 @@
 <?php
 /**
- * @var array $batch_ids List of Batch IDs assigned to the user.
- * @var wpdb $wpdb WordPress database global object.
- * @var string $table_barcodes Name of the barcodes database table.
+ * @var array $batch_data List of batch IDs with associated barcodes.
  */
 
 if (!defined('ABSPATH')) exit;
@@ -10,7 +8,7 @@ if (!defined('ABSPATH')) exit;
 
 <h2><?php _e('User Batch IDs', 'batch-id'); ?></h2>
 
-<?php if (!empty($batch_ids)) : ?>
+<?php if (!empty($batch_data)) : ?>
     <table class="widefat fixed" id="batch-id-table">
         <thead>
             <tr>
@@ -19,32 +17,24 @@ if (!defined('ABSPATH')) exit;
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($batch_ids as $batch) : ?>
+            <?php foreach ($batch_data as $batch) : ?>
                 <tr>
-                    <td><?php echo esc_html($batch->batch_id); ?></td>
+                    <td><?php echo esc_html($batch['batch_id']); ?></td>
                     <td>
                         <button
                             class="toggle-barcodes button"
-                            data-batch="<?php echo esc_attr($batch->batch_id); ?>"
+                            data-batch="<?php echo esc_attr($batch['batch_id']); ?>"
                             type="button"
                         >
                             <?php _e('Voir les barcodes', 'batch-id'); ?>
                         </button>
-                        <div class="barcodes-list" data-batch="<?php echo esc_attr($batch->batch_id); ?>" style="display:none;">
+                        <div class="barcodes-list" data-batch="<?php echo esc_attr($batch['batch_id']); ?>" style="display:none;">
                             <ul>
-                                <?php
-                                global $wpdb;
-                                $table_barcodes = $wpdb->prefix . 'barcodes';
-                                $barcodes = $wpdb->get_results($wpdb->prepare(
-                                    "SELECT barcode, is_used FROM {$table_barcodes} WHERE batch_id = %s",
-                                    $batch->batch_id
-                                ));
-
-                                foreach ($barcodes as $barcode) {
-                                    $barcode_class = ($barcode->is_used == 1) ? 'class="used"' : '';
-                                    echo '<li ' . $barcode_class . '>' . esc_html($barcode->barcode) . '</li>';
-                                }
-                                ?>
+                                <?php foreach ($batch['barcodes'] as $barcode) : ?>
+                                    <li class="<?php echo ($barcode->is_used == 1) ? 'used' : ''; ?>">
+                                        <?php echo esc_html($barcode->barcode); ?>
+                                    </li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </td>

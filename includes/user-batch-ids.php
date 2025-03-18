@@ -8,7 +8,6 @@ if (!defined('ABSPATH')) exit;
  * @global wpdb $wpdb WordPress database global object.
  * @return array List of batch IDs with unused barcodes.
  */
-
 function batch_id_get_user_batches($user_id) {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
@@ -20,21 +19,27 @@ function batch_id_get_user_batches($user_id) {
         $user_id
     ));
 
-    $batch_ids = [];
+    $batch_data = [];
 
     foreach ($all_batches as $batch) {
-        // Check if at least one barcode is not used
-        $unused_count = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0",
+        // Get barcodes for this batch
+        $barcodes = $wpdb->get_results($wpdb->prepare(
+            "SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s",
             $batch->batch_id
         ));
 
+        // Check if at least one barcode is not used
+        $unused_count = count(array_filter($barcodes, fn($b) => $b->is_used == 0));
+
         if ($unused_count > 0) {
-            $batch_ids[] = $batch;
+            $batch_data[] = [
+                'batch_id' => $batch->batch_id,
+                'barcodes' => $barcodes
+            ];
         }
     }
 
-    return $batch_ids;
+    return $batch_data;
 }
 
 /**
@@ -47,7 +52,9 @@ function batch_id_display_user_batches($user) {
         return;
     }
 
-    $batch_ids = batch_id_get_user_batches($user->ID);
+    // Fetch batch data
+    $batch_data = batch_id_get_user_batches($user->ID);
 
+    // Pass data to template
     require plugin_dir_path(__FILE__) . '../templates/user-batch-ids.php';
 }
