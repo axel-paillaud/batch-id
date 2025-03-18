@@ -25,6 +25,11 @@ if (!defined('ABSPATH')) exit;
         </div>
 
         <div>
+            <label for="quantity"><?php _e('Quantity:', 'batch-id'); ?></label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1" required />
+        </div>
+
+        <div>
             <label for="customer"><?php _e('Associate a customer (optional):', 'batch-id'); ?></label>
             <input type="text" id="customer" name="customer" placeholder="Search customer..." />
         </div>

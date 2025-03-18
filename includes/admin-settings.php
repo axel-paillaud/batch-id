@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * @param int|null $customer_id The customer ID (optional).
  * @return array Response message and success status.
  */
-function batch_id_create($batch_id, $customer_id = null) {
+function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
     $table_barcodes = $wpdb->prefix . 'barcodes';
@@ -26,6 +26,14 @@ function batch_id_create($batch_id, $customer_id = null) {
         ];
     }
 
+    // Validate quantity
+    if ($quantity < 1) {
+        return [
+            'success' => false,
+            'message' => '<div class="notice notice-error"><p>' . __('Quantity must be at least 1.', 'batch-id') . '</p></div>'
+        ];
+    }
+
     // Check if the Batch ID already exists
     if ($wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id))) {
         return [
@@ -34,24 +42,49 @@ function batch_id_create($batch_id, $customer_id = null) {
         ];
     }
 
-    // Insert the Batch ID
-    $wpdb->insert($table_batch_ids, ['batch_id' => $batch_id, 'customer_id' => $customer_id]);
+    $batch_prefix = substr($batch_id, 0, 4); // ex: 2503 (année + mois)
+    $numeric_part = (int)substr($batch_id, 4); // ex: 00034
 
-    // Generate 10 barcodes
-    $barcodes = [];
-    for ($i = 0; $i <= 9; $i++) {
-        $barcode = $batch_id . $i;
-        $wpdb->insert($table_barcodes, [
-            'barcode' => $barcode,
-            'batch_id' => $batch_id,
-            'is_used' => 0,
-            'customer_id' => $customer_id
-        ]);
+    $created_batches = [];
+
+    for ($i = 0; $i < $quantity; $i++) {
+        $new_batch_id = $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
+
+        // Maybe refacto here, we do SQL request on every iteration
+        // Check if the Batch ID already exists
+        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $new_batch_id));
+        if ($exists) {
+            continue;
+        }
+
+        // Insert the Batch ID
+        $wpdb->insert($table_batch_ids, ['batch_id' => $new_batch_id, 'customer_id' => $customer_id]);
+
+        // Generate 10 barcodes linked to this Batch ID
+        $barcodes = [];
+        for ($j = 0; $j <= 9; $j++) {
+            $barcode = $new_batch_id . $j;
+            $wpdb->insert($table_barcodes, [
+                'barcode' => $barcode,
+                'batch_id' => $new_batch_id,
+                'is_used' => 0,
+                'customer_id' => $customer_id
+            ]);
+        }
+
+        $created_batches[] = $new_batch_id;
+    }
+
+    if (empty($created_batches)) {
+        return [
+            'success' => false,
+            'message' => '<div class="notice notice-error"><p>' . __('No new Batch ID created. Some already existed.', 'batch-id') . '</p></div>'
+        ];
     }
 
     return [
         'success' => true,
-        'message' => '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>'
+        'message' => '<div class="notice notice-success"><p>' . sprintf(__('Successfully created %d Batch IDs.', 'batch-id'), count($created_batches)) . '</p></div>'
     ];
 }
 
@@ -138,7 +171,8 @@ function batch_id_admin_page() {
             // Process new Batch ID creation
             $batch_id = sanitize_text_field($_POST['batch_id']);
             $customer_id = !empty($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
-            $response = batch_id_create($batch_id, $customer_id);
+            $quantity = !empty($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+            $response = batch_id_create($batch_id, $customer_id, $quantity);
         } elseif (isset($_POST['delete_batch_id'])) {
             // Process Batch ID deletion
             $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
