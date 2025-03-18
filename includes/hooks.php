@@ -27,7 +27,7 @@ add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 // Add a new "Batch ID" tab in My Account
 add_filter('woocommerce_account_menu_items', 'batch_id_add_account_tab', 40);
 function batch_id_add_account_tab($items) {
-    $items['batch-id'] = __('Batch ID', 'batch-id'); // Add the tab
+    $items['batch-id'] = __('Batch ID', 'batch-id');
     return $items;
 }
 
@@ -76,11 +76,24 @@ function batch_id_display_user_batches($user) {
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
     $table_barcodes = $wpdb->prefix . 'barcodes';
 
-    // Retrieve Batch IDs assigned to this user
-    $batch_ids = $wpdb->get_results($wpdb->prepare(
+    $all_batches = $wpdb->get_results($wpdb->prepare(
         "SELECT batch_id FROM $table_batch_ids WHERE customer_id = %d ORDER BY created_at DESC",
         $user->ID
     ));
+
+    $batch_ids = [];
+
+    foreach ($all_batches as $batch) {
+        // Check if at least one barcode is not used
+        $unused_count = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0",
+            $batch->batch_id
+        ));
+
+        if ($unused_count > 0) {
+            $batch_ids[] = $batch;
+        }
+    }
 
     require plugin_dir_path(__FILE__) . '../templates/user-batch-ids.php';
 }
