@@ -33,6 +33,8 @@ if (!defined('ABSPATH')) exit;
                         <div class="barcodes-list" data-batch="<?php echo esc_attr($batch->batch_id); ?>" style="display:none;">
                             <ul>
                                 <?php
+                                global $wpdb;
+                                $table_barcodes = $wpdb->prefix . 'barcodes';
                                 $barcodes = $wpdb->get_results($wpdb->prepare(
                                     "SELECT barcode, is_used FROM {$table_barcodes} WHERE batch_id = %s",
                                     $batch->batch_id

@@ -67,35 +67,5 @@ function batch_id_search_customers() {
 add_action('wp_ajax_batch_id_search_customers', 'batch_id_search_customers');
 
 // Add batch ID on back-office user page
-function batch_id_display_user_batches($user) {
-    if (!current_user_can('edit_users')) {
-        return;
-    }
-
-    global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
-
-    $all_batches = $wpdb->get_results($wpdb->prepare(
-        "SELECT batch_id FROM $table_batch_ids WHERE customer_id = %d ORDER BY created_at DESC",
-        $user->ID
-    ));
-
-    $batch_ids = [];
-
-    foreach ($all_batches as $batch) {
-        // Check if at least one barcode is not used
-        $unused_count = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0",
-            $batch->batch_id
-        ));
-
-        if ($unused_count > 0) {
-            $batch_ids[] = $batch;
-        }
-    }
-
-    require plugin_dir_path(__FILE__) . '../templates/user-batch-ids.php';
-}
 add_action('show_user_profile', 'batch_id_display_user_batches');
 add_action('edit_user_profile', 'batch_id_display_user_batches');
