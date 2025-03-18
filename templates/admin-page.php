@@ -19,6 +19,19 @@ if (!defined('ABSPATH')) exit;
     <div id="batch-id-message" style="display: none;"></div>
 
     <form method="post" id="batch-id-form">
+
+        <div>
+            <label for="type_id"><?php _e('Batch Type:', 'batch-id'); ?></label>
+            <select id="type_id" name="type_id">
+                <?php
+                $types = $wpdb->get_results("SELECT id, name FROM " . $wpdb->prefix . "batch_types");
+                foreach ($types as $type) {
+                    echo '<option value="' . esc_attr($type->id) . '">' . esc_html($type->name) . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+
         <div>
             <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
             <input type="text" id="batch_id" name="batch_id" value="<?php echo esc_attr($next_batch_id); ?>" maxlength="9" required />

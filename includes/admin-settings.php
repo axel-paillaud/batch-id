@@ -8,13 +8,15 @@ if (!defined('ABSPATH')) {
  *
  * @global wpdb $wpdb WordPress database global object.
  * @param string $batch_id The Batch ID to create.
+ * @param int $type_id The batch type ID (default is 1).
  * @param int|null $customer_id The customer ID (optional).
  * @return array Response message and success status.
  */
-function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
+function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity = 1) {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
     $table_barcodes = $wpdb->prefix . 'barcodes';
+    $table_batch_types = $wpdb->prefix . 'batch_types';
 
     // Validate Batch ID format
     if (!preg_match('/^\d{9}$/', $batch_id)) {
@@ -32,7 +34,17 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
         ];
     }
 
-    $batch_prefix = substr($batch_id, 0, 4); // ex: 2503 (année + mois)
+    // Get batch type
+    $type_prefix = $wpdb->get_var($wpdb->prepare("SELECT prefix FROM $table_batch_types WHERE id = %d", $type_id));
+
+    if (!$type_prefix) {
+        return [
+            'success' => false,
+            'message' => '<div class="notice notice-error"><p>' . __('Invalid batch type selected.', 'batch-id') . '</p></div>'
+        ];
+    }
+
+    $batch_prefix = substr($batch_id, 0, 4); // ex: 2503
     $numeric_part = (int)substr($batch_id, 4); // ex: 00034
 
     // Already existing batch IDs
@@ -41,7 +53,7 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
     $created_batches = [];
 
     for ($i = 0; $i < $quantity; $i++) {
-        $new_batch_id = $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
+        $new_batch_id = $type_prefix . $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
 
         // Check if the Batch ID already exists
         if (in_array($new_batch_id, $existing_batch_ids)) {
@@ -160,10 +172,13 @@ function batch_id_admin_page() {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['batch_id'])) {
             // Process new Batch ID creation
+            // TODO: check if this part is safe. sanitize_text is ok ?
+            $batch_type = sanitize_text_field($_POST['type_id']);
+            $batch_type = !empty($batch_type) ? intval($batch_type) : NULL;
             $batch_id = sanitize_text_field($_POST['batch_id']);
             $customer_id = !empty($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
             $quantity = !empty($_POST['quantity']) ? intval($_POST['quantity']) : 1;
-            $response = batch_id_create($batch_id, $customer_id, $quantity);
+            $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
         } elseif (isset($_POST['delete_batch_id'])) {
             // Process Batch ID deletion
             $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
