@@ -37,14 +37,16 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
     $batch_prefix = substr($batch_id, 0, 4); // ex: 2503 (année + mois)
     $numeric_part = (int)substr($batch_id, 4); // ex: 00034
 
+    // Already existing batch IDs
+    $existing_batch_ids = $wpdb->get_col("SELECT batch_id FROM $table_batch_ids");
+
     $created_batches = [];
 
     for ($i = 0; $i < $quantity; $i++) {
         $new_batch_id = $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
 
         // Check if the Batch ID already exists
-        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $new_batch_id));
-        if ($exists) {
+        if (in_array($new_batch_id, $existing_batch_ids)) {
             continue;
         }
 
