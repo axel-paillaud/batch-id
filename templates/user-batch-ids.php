@@ -1,4 +1,12 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php
+/**
+ * @var array $batch_ids List of Batch IDs assigned to the user.
+ * @var wpdb $wpdb WordPress database global object.
+ * @var string $table_barcodes Name of the barcodes database table.
+ */
+
+if (!defined('ABSPATH')) exit;
+?>
 
 <h2><?php _e('User Batch IDs', 'batch-id'); ?></h2>
 
@@ -11,12 +19,9 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($batch_ids as $batch) :
-                $unused_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_barcodes WHERE batch_id = %s AND is_used = 0", $batch->batch_id));
-                $batch_style = ($unused_count == 0) ? 'used' : '';
-            ?>
+            <?php foreach ($batch_ids as $batch) : ?>
                 <tr>
-                    <td class="<?php echo $batch_style; ?>"><?php echo esc_html($batch->batch_id); ?></td>
+                    <td><?php echo esc_html($batch->batch_id); ?></td>
                     <td>
                         <button
                             class="toggle-barcodes button"
