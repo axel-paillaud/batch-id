@@ -34,14 +34,6 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
         ];
     }
 
-    // Check if the Batch ID already exists
-    if ($wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id))) {
-        return [
-            'success' => false,
-            'message' => '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>'
-        ];
-    }
-
     $batch_prefix = substr($batch_id, 0, 4); // ex: 2503 (année + mois)
     $numeric_part = (int)substr($batch_id, 4); // ex: 00034
 
@@ -50,7 +42,6 @@ function batch_id_create($batch_id, $customer_id = null, $quantity = 1) {
     for ($i = 0; $i < $quantity; $i++) {
         $new_batch_id = $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
 
-        // Maybe refacto here, we do SQL request on every iteration
         // Check if the Batch ID already exists
         $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $new_batch_id));
         if ($exists) {
