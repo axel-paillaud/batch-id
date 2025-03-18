@@ -118,7 +118,7 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
 
     // Retrieve batch IDs with pagination
     $batch_results = $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM $table_batch_ids ORDER BY created_at DESC LIMIT %d OFFSET %d",
+        "SELECT * FROM $table_batch_ids ORDER BY id DESC LIMIT %d OFFSET %d",
         $per_page,
         $offset
     ));
