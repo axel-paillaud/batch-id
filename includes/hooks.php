@@ -24,6 +24,20 @@ function batch_id_enqueue_front_styles() {
 }
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 
+// Add admin menu page
+function batch_id_add_admin_menu() {
+    add_menu_page(
+        __('Batch ID Admin Page', 'batch-id'),
+        __('Batch ID', 'batch-id'),
+        'manage_options',
+        'batch-id-settings',
+        'batch_id_admin_page',
+        'dashicons-media-spreadsheet',
+        20
+    );
+}
+add_action('admin_menu', 'batch_id_add_admin_menu');
+
 // Add a new "Batch ID" tab in My Account
 add_filter('woocommerce_account_menu_items', 'batch_id_add_account_tab', 40);
 function batch_id_add_account_tab($items) {

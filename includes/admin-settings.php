@@ -3,21 +3,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Move this into hooks.php
-function batch_id_add_admin_menu() {
-    add_menu_page(
-        __('Batch ID Admin Page', 'batch-id'),
-        __('Batch ID', 'batch-id'),
-        'manage_options',
-        'batch-id-settings',
-        'batch_id_admin_page',
-        'dashicons-media-spreadsheet',
-        20
-    );
-}
-
-add_action('admin_menu', 'batch_id_add_admin_menu');
-
 /**
  * Process Batch ID creation.
  *
