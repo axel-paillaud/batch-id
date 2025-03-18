@@ -194,7 +194,7 @@ function batch_id_admin_page() {
     $batch_prefix = date('y') . date('m');
     $last_batch_id = $wpdb->get_var("SELECT batch_id FROM {$table_batch_ids} ORDER BY id DESC LIMIT 1");
 
-    if ($last_batch_id && preg_match('/^(\d{4})(\d{5})$/', $last_batch_id, $matches)) {
+    if ($last_batch_id && preg_match('/^\d(\d{4})(\d{5})$/', $last_batch_id, $matches)) {
         $last_prefix = $matches[1];
         $last_number = intval($matches[2]);
         $next_number = ($last_prefix === $batch_prefix) ? str_pad($last_number + 1, 5, '0', STR_PAD_LEFT) : '00000';
