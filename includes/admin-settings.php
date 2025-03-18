@@ -20,23 +20,25 @@ function batch_id_create($batch_id, $customer_id = null) {
 
     // Validate Batch ID format
     if (!preg_match('/^\d{9}$/', $batch_id)) {
-        $response['success'] = false;
-        $response['message'] = '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>';
-        return $response;
+        return [
+            'success' => false,
+            'message' => '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>'
+        ];
     }
 
     // Check if the Batch ID already exists
-    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
-    if ($exists) {
-        $response['success'] = false;
-        $response['message'] = '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>';
-        return $response;
+    if ($wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id))) {
+        return [
+            'success' => false,
+            'message' => '<div class="notice notice-error"><p>' . __('This Batch ID already exists.', 'batch-id') . '</p></div>'
+        ];
     }
 
     // Insert the Batch ID
     $wpdb->insert($table_batch_ids, ['batch_id' => $batch_id, 'customer_id' => $customer_id]);
 
-    // Generate 10 barcodes linked to the Batch ID
+    // Generate 10 barcodes
+    $barcodes = [];
     for ($i = 0; $i <= 9; $i++) {
         $barcode = $batch_id . $i;
         $wpdb->insert($table_barcodes, [
@@ -47,9 +49,10 @@ function batch_id_create($batch_id, $customer_id = null) {
         ]);
     }
 
-    $response['success'] = true;
-    $response['message'] = '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>';
-    return $response;
+    return [
+        'success' => true,
+        'message' => '<div class="notice notice-success"><p>' . __('Batch ID and barcodes generated successfully!', 'batch-id') . '</p></div>'
+    ];
 }
 
 /**
