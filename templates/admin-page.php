@@ -102,7 +102,7 @@ if (!defined('ABSPATH')) exit;
                             </div>
                         </td>
                         <td>
-                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this Batch ID?');">
+                            <form method="post" class="batch-id-delete-form" onsubmit="return confirm('Are you sure you want to delete this Batch ID?');">
                                 <input type="hidden" name="delete_batch_id" value="<?php echo esc_attr($batch['batch_id']); ?>" />
                                 <button type="submit" class="button button-link-delete">
                                     <span class="dashicons dashicons-trash"></span>

@@ -21,6 +21,11 @@
     border: 1px solid #f5c6cb;
 }
 
+.batch-id-delete-form .button-link-delete {
+    display: flex;
+    align-items: center;
+}
+
 #batch-id-table tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
