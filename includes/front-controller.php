@@ -13,6 +13,7 @@ function batch_id_claim_batch(int $batch_id) {
     global $wpdb;
     $user_id = get_current_user_id();
     $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_barcodes = $wpdb->prefix . 'barcodes';
 
     $batch_id = isset($_POST['claim_batch_id']) ? trim($_POST['claim_batch_id']) : '';
 
@@ -41,9 +42,10 @@ function batch_id_claim_batch(int $batch_id) {
     // Assign the Batch ID to the current user
     $wpdb->update($table_batch_ids, ['customer_id' => $user_id], ['batch_id' => $batch_id]);
 
-    return ['success' => true, 'message' => __('Batch ID successfully claimed!', 'batch-id')];
+    // Assign all associated barcodes to the user
+    $wpdb->update($table_barcodes, ['customer_id' => $user_id], ['batch_id' => $batch_id]);
 
-    return null;
+    return ['success' => true, 'message' => __('Batch ID successfully claimed!', 'batch-id')];
 }
 
 function batch_id_handle_claim_request() {
