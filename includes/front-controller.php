@@ -29,7 +29,7 @@ function batch_id_claim_batch(int $batch_id) {
     }
 
     // Check if the Batch ID is already assigned to a user
-    if (!$batch->customer_id === null || !(int) $batch->customer_id !== 0) {
+    if (!$batch->customer_id === null || (int) $batch->customer_id !== 0) {
         return ['success' => false, 'message' => __('This Batch ID is already assigned to a user.', 'batch-id')];
     }
 

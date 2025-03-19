@@ -24,7 +24,7 @@ $batch_message = isset($_GET['batch_message']) ? sanitize_text_field(urldecode($
 
     <?php if (!empty($batch_message)) : ?>
         <div class="batch-message <?php echo $batch_status === 'success' ? 'success' : 'error'; ?>">
-            <?php echo esc_html($batch_message); ?>
+            <?php echo wp_kses_post($batch_message); ?>
         </div>
     <?php endif; ?>
 </div>
