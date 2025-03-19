@@ -76,6 +76,17 @@
     border-color: #18798f;
 }
 
+.batch-message.error {
+    color: #da0f0f;
+}
+
+.batch-message.success {
+    margin-top: 16px;
+    color: green;
+    border-left: 2px solid green;
+    padding-left: 16px;
+}
+
 /* Batch search */
 .batch-search {
     position: relative;

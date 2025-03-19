@@ -29,7 +29,7 @@ function batch_id_claim_batch(int $batch_id) {
     }
 
     // Check if the Batch ID is already assigned to a user
-    if (!is_null($batch->customer_id)) {
+    if (!$batch->customer_id === null || !(int) $batch->customer_id !== 0) {
         return ['success' => false, 'message' => __('This Batch ID is already assigned to a user.', 'batch-id')];
     }
 
@@ -51,7 +51,7 @@ function batch_id_handle_claim_request() {
         $batch_id = sanitize_text_field(trim($_POST['claim_batch_id']));
         $response = batch_id_claim_batch($batch_id);
 
-        // Redirige après soumission avec un message en query string
+        // Redirect after submission with a message in query string
         wp_redirect(add_query_arg([
             'batch_status' => $response['success'] ? 'success' : 'error',
             'batch_message' => urlencode($response['message'])
@@ -59,7 +59,6 @@ function batch_id_handle_claim_request() {
         exit;
     }
 }
-add_action('admin_post_nopriv_batch_id_claim', 'batch_id_handle_claim_request');
 add_action('admin_post_batch_id_claim', 'batch_id_handle_claim_request');
 
 function batch_id_display_front_page() {
