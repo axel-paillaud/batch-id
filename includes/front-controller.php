@@ -42,11 +42,6 @@ function batch_id_claim_batch() {
     return null;
 }
 
-add_action('wp', function () {
-    global $response;
-    $response = batch_id_claim_batch();
-});
-
 function batch_id_display_front_page() {
     $user_id = get_current_user_id();
     if (!$user_id) {
