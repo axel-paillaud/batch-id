@@ -22,7 +22,11 @@ if (!defined('ABSPATH')) exit;
 
         <div>
             <label for="type_id"><?php _e('Batch Type:', 'batch-id'); ?></label>
-            <select id="type_id" name="type_id">
+            <select
+                id="type_id"
+                name="type_id"
+                title="<?php _e('Select a batch id type, which will be added as an identifier at the beginning of the batch ID.', 'batch-id'); ?>"
+            >
                 <?php
                 $types = $wpdb->get_results("SELECT id, name FROM " . $wpdb->prefix . "batch_types");
                 foreach ($types as $type) {
@@ -33,8 +37,18 @@ if (!defined('ABSPATH')) exit;
         </div>
 
         <div>
-            <label for="batch_id"><?php _e('Enter a Batch ID:', 'batch-id'); ?></label>
-            <input type="text" id="batch_id" name="batch_id" value="<?php echo esc_attr($next_batch_id); ?>" maxlength="9" required />
+            <label for="batch_id" ">
+                <?php _e('Enter a Batch ID:', 'batch-id'); ?>
+            </label>
+            <input
+                title="<?php _e('Enter a Batch ID without batch type prefix.', 'batch-id'); ?>"
+                type="text"
+                id="batch_id"
+                name="batch_id"
+                value="<?php echo esc_attr($next_batch_id); ?>"
+                maxlength="9"
+                required
+            />
         </div>
 
         <div>
