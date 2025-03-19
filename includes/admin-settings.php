@@ -172,12 +172,10 @@ function batch_id_admin_page() {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['batch_id'])) {
             // Process new Batch ID creation
-            // TODO: check if this part is safe. sanitize_text is ok ?
-            $batch_type = sanitize_text_field($_POST['type_id']);
-            $batch_type = !empty($batch_type) ? intval($batch_type) : NULL;
-            $batch_id = sanitize_text_field($_POST['batch_id']);
-            $customer_id = !empty($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
-            $quantity = !empty($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+            $batch_id = isset($_POST['batch_id']) ? trim($_POST['batch_id']) : '';
+            $batch_type = isset($_POST['type_id']) ? intval($_POST['type_id']) : 1;
+            $customer_id = isset($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
+            $quantity = isset($_POST['quantity']) ? max(1, intval($_POST['quantity'])) : 1;
             $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
         } elseif (isset($_POST['delete_batch_id'])) {
             // Process Batch ID deletion
