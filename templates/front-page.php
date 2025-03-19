@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
 // Récupérer les paramètres de la query string
 // TODO: extract this part to controller
 $batch_status = isset($_GET['batch_status']) ? sanitize_text_field($_GET['batch_status']) : '';
-$batch_message = isset($_GET['batch_message']) ? sanitize_text_field(urldecode($_GET['batch_message'])) : '';
+$batch_message = isset($_GET['batch_message']) ? urldecode($_GET['batch_message']) : '';
 ?>
 
 <div class="batch-add">
@@ -24,7 +24,7 @@ $batch_message = isset($_GET['batch_message']) ? sanitize_text_field(urldecode($
 
     <?php if (!empty($batch_message)) : ?>
         <div class="batch-message <?php echo $batch_status === 'success' ? 'success' : 'error'; ?>">
-            <?php echo wp_kses_post($batch_message); ?>
+            <?php echo $batch_message; ?>
         </div>
     <?php endif; ?>
 </div>

@@ -35,7 +35,7 @@ function batch_id_claim_batch(int $batch_id) {
 
     // Check if the Batch ID is of type "float" (prefix = 2)
     if (!str_starts_with($batch_id, '2')) {
-        return ['success' => false, 'message' => __('Only "float" Batch IDs can be claimed.', 'batch-id')];
+        return ['success' => false, 'message' => __("Only `float` Batch IDs can be claimed.", 'batch-id')];
     }
 
     // Assign the Batch ID to the current user
