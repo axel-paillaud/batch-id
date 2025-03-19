@@ -1,11 +1,27 @@
 <?php
 /**
+ * @var array $response
  * @var object[] $batch_data
  * @var int $total_batches
  */
 
 if (!defined('ABSPATH')) exit;
 ?>
+
+<div class="batch-add">
+    <h2><?php _e('Claim a Batch ID', 'batch-id'); ?></h2>
+    <form method="post">
+        <label hidden for="claim_batch_id"><?php _e('Enter your Batch ID:', 'batch-id'); ?></label>
+        <input class="batch-id-input" type="text" id="claim_batch_id" name="claim_batch_id" placeholder="Enter your 10 digits Batch ID" maxlength="10" required />
+        <button type="submit" class="button"><?php _e('Claim', 'batch-id'); ?></button>
+    </form>
+
+    <?php if (!empty($response['message'])) : ?>
+        <div class="batch-message <?php echo $response['success'] ? 'success' : 'error'; ?>">
+            <?php echo $response['message']; ?>
+        </div>
+    <?php endif; ?>
+</div>
 
 <div class="batch-id-title">
     <h2>Your available barcodes</h2>
