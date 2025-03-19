@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap');
 
 .batch-id-title {
-    margin-bottom: 24px;
+    margin-bottom: 10px;
 }
 
 .batch-container {
     display: flex;
     flex-wrap: wrap;
     gap: 28px;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .batch-column {
@@ -47,4 +47,38 @@
 .barcode.used, .barcode-code.used {
     text-decoration: line-through;
     color: #8b8b8b;
+}
+
+/* Batch search */
+.batch-search {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 2px solid #bad2d8;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.batch-search .dashicons {
+    font-size: 20px;
+    color: #555;
+    margin-right: 8px;
+}
+
+#batch-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 5px;
+    background: transparent;
+    width: 100%;
+}
+
+#batch-search-input::placeholder {
+    color: #aaa;
 }

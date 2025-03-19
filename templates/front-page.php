@@ -9,11 +9,12 @@ if (!defined('ABSPATH')) exit;
 
 <div class="batch-id-title">
     <h2>Your available barcodes</h2>
-    <p><?php echo $total_batches; ?> batch ID</p>
+    <p><?php echo $total_batches; ?> batch IDs</p>
 </div>
 
 <div class="batch-search">
-    <label for="batch-search-input"><?php _e('Search a Batch ID:', 'batch-id'); ?></label>
+    <label hidden for="batch-search-input"><?php _e('Search a Batch ID:', 'batch-id'); ?></label>
+    <span class="dashicons dashicons-search"></span>
     <input type="text" id="batch-search-input" placeholder="Search a Batch ID..." />
 </div>
 
