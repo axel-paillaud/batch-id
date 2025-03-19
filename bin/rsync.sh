@@ -9,12 +9,12 @@ NC='\033[0m' # Reset
 REMOTE_USER="tava6855"
 REMOTE_HOST="sharp.o2switch.net"
 REMOTE_DIR="/home/tava6855/public_html/wp-content/plugins/batch-id"
-INSECTO_V4_PATH="/home/$(whoami)/Code/clients/smartlife/smartlifebiosciences.local/wp-content/plugins/batch-id"
-RSYNC_IGNORE="$INSECTO_V4_PATH/.rsyncignore"
+SMARTLIFE_LOCAL_PATH="/home/$(whoami)/Code/clients/smartlife/smartlifebiosciences.local/wp-content/plugins/batch-id"
+RSYNC_IGNORE="$SMARTLIFE_LOCAL_PATH/.rsyncignore"
 
 # Check if the source directory exists
-if [ ! -d "$INSECTO_V4_PATH" ]; then
-  echo -e "${RED}Error: Source directory does not exist: $INSECTO_V4_PATH${NC}"
+if [ ! -d "$SMARTLIFE_LOCAL_PATH" ]; then
+  echo -e "${RED}Error: Source directory does not exist: $SMARTLIFE_LOCAL_PATH${NC}"
   exit 1
 fi
 
@@ -24,7 +24,7 @@ if [ ! -f "$RSYNC_IGNORE" ]; then
   exit 1
 fi
 
-cd "$INSECTO_V4_PATH" || exit
+cd "$SMARTLIFE_LOCAL_PATH" || exit
 
 # Add a test mode (dry-run)
 DRY_RUN=""
