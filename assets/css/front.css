@@ -129,3 +129,15 @@
 #batch-search-input::placeholder {
     color: #aaa;
 }
+
+/* Responsive */
+
+@media screen and (max-width: 640px) {
+    .batch-container {
+        justify-content: center;
+    }
+
+    .batch-add form {
+        flex-direction: column;
+    }
+}
