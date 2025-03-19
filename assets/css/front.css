@@ -46,4 +46,5 @@
 
 .barcode.used, .barcode-code.used {
     text-decoration: line-through;
+    color: #8b8b8b;
 }
