@@ -14,15 +14,29 @@ function batch_id_enqueue_admin_scripts($hook) {
 
     wp_enqueue_script('batch-id-admin-js', $plugin_url . '../assets/js/admin.js', ['jquery', 'jquery-ui-autocomplete'], false, true);
 
-    wp_enqueue_style('batch-id-admin-css', $plugin_url . '../assets/css/admin.css');
 }
-
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');
+
+function batch_id_enqueue_admin_styles() {
+    wp_enqueue_style('batch-id-admin-css', plugin_dir_url(__FILE__) . '../assets/css/admin.css');
+}
+add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_styles');
 
 function batch_id_enqueue_front_styles() {
     wp_enqueue_style('batch-id-front-css', plugin_dir_url(__FILE__) . '../assets/css/front.css');
 }
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
+
+function batch_id_enqueue_front_scripts() {
+    wp_enqueue_script(
+        'batch-id-front-js',
+        plugin_dir_url(__FILE__) . '../assets/js/front.js',
+        [],
+        false,
+        true
+    );
+}
+add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_scripts');
 
 // Add admin menu page
 function batch_id_add_admin_menu() {
