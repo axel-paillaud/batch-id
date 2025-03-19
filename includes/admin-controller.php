@@ -35,9 +35,9 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     }
 
     // Get batch type
-    $type_prefix = $wpdb->get_var($wpdb->prepare("SELECT prefix FROM $table_batch_types WHERE prefix = %d", $type_id));
+    $batch_type = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_batch_types WHERE prefix = %d", $type_id));
 
-    if (!$type_prefix) {
+    if (!$batch_type) {
         return [
             'success' => false,
             'message' => '<div class="notice notice-error"><p>' . __('Invalid batch type selected.', 'batch-id') . '</p></div>'
@@ -53,7 +53,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     $created_batches = [];
 
     for ($i = 0; $i < $quantity; $i++) {
-        $new_batch_id = $type_prefix . $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
+        $new_batch_id = $batch_type->prefix . $batch_prefix . str_pad($numeric_part + $i, 5, '0', STR_PAD_LEFT);
 
         // Check if the Batch ID already exists
         if (in_array($new_batch_id, $existing_batch_ids)) {
@@ -61,7 +61,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
         }
 
         // Insert the Batch ID
-        $wpdb->insert($table_batch_ids, ['batch_id' => $new_batch_id, 'customer_id' => $customer_id]);
+        $wpdb->insert($table_batch_ids, ['batch_id' => $new_batch_id, 'type_id' => $batch_type->id, 'customer_id' => $customer_id]);
 
         // Generate 10 barcodes linked to this Batch ID
         $barcodes = [];
