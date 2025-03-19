@@ -174,7 +174,7 @@ function batch_id_admin_page() {
             // Process new Batch ID creation
             $batch_id = isset($_POST['batch_id']) ? trim($_POST['batch_id']) : '';
             $batch_type = isset($_POST['type_id']) ? intval($_POST['type_id']) : 1;
-            $customer_id = isset($_POST['customer_id']) ? intval($_POST['customer_id']) : NULL;
+            $customer_id = (isset($_POST['customer_id']) && $_POST['customer_id'] !== '') ? intval($_POST['customer_id']) : NULL;
             $quantity = isset($_POST['quantity']) ? max(1, intval($_POST['quantity'])) : 1;
             $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
         } elseif (isset($_POST['delete_batch_id'])) {
