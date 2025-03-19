@@ -22,7 +22,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/db-install.php';
 require_once plugin_dir_path(__FILE__) . 'includes/db-uninstall.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/user-batch-ids.php';
-require_once plugin_dir_path(__FILE__) . 'includes/front-display.php';
+require_once plugin_dir_path(__FILE__) . 'includes/front-controller.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hooks.php';
 
 function batch_id_load_textdomain() {
