@@ -3,6 +3,50 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function batch_id_claim_batch() {
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['claim_batch_id']) && is_user_logged_in()) {
+        global $wpdb;
+        $user_id = get_current_user_id();
+        $table_batch_ids = $wpdb->prefix . 'batch_ids';
+
+        $batch_id = isset($_POST['claim_batch_id']) ? trim($_POST['claim_batch_id']) : '';
+
+        // Check if the Batch ID is valid (10 digits)
+        if (!preg_match('/^\d{10}$/', $batch_id)) {
+            return ['success' => false, 'message' => __('Invalid Batch ID format. Must be exactly 10 digits.', 'batch-id')];
+        }
+
+        // Check if the Batch ID exists in the database
+        $batch = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
+
+        if (!$batch) {
+            return ['success' => false, 'message' => __('This Batch ID does not exist.', 'batch-id')];
+        }
+
+        // Check if the Batch ID is already assigned to a user
+        if (!is_null($batch->customer_id)) {
+            return ['success' => false, 'message' => __('This Batch ID is already assigned to a user.', 'batch-id')];
+        }
+
+        // Check if the Batch ID is of type "float" (prefix = 2)
+        if (!str_starts_with($batch_id, '2')) {
+            return ['success' => false, 'message' => __('Only "float" Batch IDs can be claimed.', 'batch-id')];
+        }
+
+        // Assign the Batch ID to the current user
+        $wpdb->update($table_batch_ids, ['customer_id' => $user_id], ['batch_id' => $batch_id]);
+
+        return ['success' => true, 'message' => __('Batch ID successfully claimed!', 'batch-id')];
+    }
+
+    return null;
+}
+
+add_action('wp', function () {
+    global $response;
+    $response = batch_id_claim_batch();
+});
+
 function batch_id_display_front_page() {
     $user_id = get_current_user_id();
     if (!$user_id) {
