@@ -91,6 +91,10 @@
     padding: 5px 10px;
 }
 
+.batch-search:focus-within {
+    border-color: #18798f;
+}
+
 .batch-search .dashicons {
     font-size: 20px;
     color: #555;
