@@ -1,16 +1,12 @@
 <?php
 /**
- * @var array $response
- * @var object[] $batch_data
+ * @var string $batch_status
+ * @var string $batch_message
+ * @var array $batch_data
  * @var int $total_batches
  */
 
 if (!defined('ABSPATH')) exit;
-
-// Récupérer les paramètres de la query string
-// TODO: extract this part to controller
-$batch_status = isset($_GET['batch_status']) ? sanitize_text_field($_GET['batch_status']) : '';
-$batch_message = isset($_GET['batch_message']) ? urldecode($_GET['batch_message']) : '';
 ?>
 
 <div class="batch-add">

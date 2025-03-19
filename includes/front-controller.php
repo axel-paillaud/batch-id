@@ -101,5 +101,9 @@ function batch_id_display_front_page() {
 
     $total_batches = count($batch_data);
 
+    // Extract batch status & message from query string
+    $batch_status = isset($_GET['batch_status']) ? sanitize_text_field($_GET['batch_status']) : '';
+    $batch_message = isset($_GET['batch_message']) ? stripslashes(urldecode($_GET['batch_message'])) : '';
+
     require plugin_dir_path(__FILE__) . '../templates/front-page.php';
 }
