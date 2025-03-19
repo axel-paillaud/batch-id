@@ -1,4 +1,7 @@
 <?php
+/*
+ * Show batch IDs on the back-office user profile page.
+ */
 if (!defined('ABSPATH')) exit;
 
 /**
