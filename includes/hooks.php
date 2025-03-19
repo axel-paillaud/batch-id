@@ -63,6 +63,7 @@ function batch_id_search_customers() {
         SELECT ID, display_name
         FROM {$wpdb->prefix}users
         WHERE display_name LIKE %s
+        ORDER BY display_name ASC
         LIMIT 10", '%' . $wpdb->esc_like($search_term) . '%'
     ));
 
