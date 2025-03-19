@@ -2,7 +2,8 @@
 /**
  * @var array $batch_info
  * @var array $response
- * @var object[] $batch_ids
+ * @var object $batch_ids
+ * @var object $types
  * @var int $total_pages
  * @var int $current_page
  * @var string $next_batch_id
@@ -28,7 +29,6 @@ if (!defined('ABSPATH')) exit;
                 title="<?php _e('Select a batch id type, which will be added as an identifier at the beginning of the batch ID.', 'batch-id'); ?>"
             >
                 <?php
-                $types = $wpdb->get_results("SELECT id, name FROM " . $wpdb->prefix . "batch_types");
                 foreach ($types as $type) {
                     echo '<option value="' . esc_attr($type->id) . '">' . esc_html($type->name) . '</option>';
                 }

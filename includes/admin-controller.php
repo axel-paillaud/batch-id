@@ -184,6 +184,9 @@ function batch_id_admin_page() {
         }
     }
 
+    // Get all batch types
+    $types = $wpdb->get_results("SELECT id, name FROM " . $wpdb->prefix . "batch_types");
+
     // Get pagination info
     $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
     $batch_info = batch_id_get_admin_batches($current_page);
