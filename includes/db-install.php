@@ -28,7 +28,10 @@ function batch_id_create_tables() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         INDEX (batch_id),
-        INDEX (customer_id)
+        INDEX (customer_id),
+        INDEX (type_id),
+        FOREIGN KEY (type_id) REFERENCES $table_batch_types(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (customer_id) REFERENCES $wpdb->users(ID) ON DELETE SET NULL ON UPDATE CASCADE
     ) $charset_collate;";
 
     // Barcode table
