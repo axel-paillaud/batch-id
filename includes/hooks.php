@@ -23,7 +23,13 @@ function batch_id_enqueue_admin_styles() {
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_styles');
 
 function batch_id_enqueue_front_styles() {
-    wp_enqueue_style('batch-id-front-css', plugin_dir_url(__FILE__) . '../assets/css/front.css');
+    $css_file = plugin_dir_path(__FILE__) . '../assets/css/front.css';
+    $css_url = plugin_dir_url(__FILE__) . '../assets/css/front.css';
+
+    // Vérifie si le fichier CSS existe et récupère sa date de modification
+    $version = file_exists($css_file) ? filemtime($css_file) : time();
+
+    wp_enqueue_style('batch-id-front-css', $css_url, [], $version);
 }
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 
