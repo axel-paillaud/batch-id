@@ -2,6 +2,7 @@
 /**
  * @var string $batch_status Message status (success/error)
  * @var string $batch_message
+ * @var array $batch_types
  * @var array $batch_data
  * @var int $total_batches
  */
@@ -39,16 +40,30 @@ if (!defined('ABSPATH')) exit;
     <p><?php echo $total_batches; ?> batch IDs</p>
 </div>
 
-<div class="batch-search">
-    <label hidden for="batch-search-input"><?php _e('Search a Batch ID:', 'batch-id'); ?></label>
-    <span class="dashicons dashicons-search"></span>
-    <input type="text" id="batch-search-input" placeholder="Search a Batch ID..." />
+<div class="batch-filter-container">
+    <div class="batch-search">
+        <label hidden for="batch-search-input"><?php _e('Search a Batch ID:', 'batch-id'); ?></label>
+        <span class="dashicons dashicons-search"></span>
+        <input type="text" id="batch-search-input" placeholder="Search a Batch ID..." />
+    </div>
+
+    <label hidden for="batch-filter-type"><?php _e('Filter by Type:', 'batch-id'); ?></label>
+    <select id="batch-filter-type">
+        <option value=""><?php _e('All Types', 'batch-id'); ?></option>
+        <?php foreach ($batch_types as $type_id => $type) : ?>
+        <option value="<?= esc_attr($type->name); ?>"><?= esc_html($type->name); ?></option>
+        <?php endforeach; ?>
+    </select>
 </div>
 
 <?php if (!empty($batch_data)) : ?>
     <div class="batch-container">
         <?php foreach ($batch_data as $batch) : ?>
-            <div class="batch-column <?= $batch['css_class']; ?>" data-batch-id="<?php echo esc_attr($batch['batch_id']); ?>">
+            <div
+                class="batch-column <?= esc_attr($batch['css_class']); ?>"
+                data-batch-id="<?= esc_attr($batch['batch_id']); ?>"
+                data-batch-type="<?= esc_attr($batch['type']); ?>"
+            >
                 <div class="batch-header"><?php echo esc_html("Batch ID " . $batch['batch_id']); ?></div>
                 <?php foreach ($batch['barcodes'] as $barcode) : ?>
                     <div class="barcode-container">
