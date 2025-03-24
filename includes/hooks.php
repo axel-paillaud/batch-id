@@ -34,11 +34,16 @@ function batch_id_enqueue_front_styles() {
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 
 function batch_id_enqueue_front_scripts() {
+    $js_file = plugin_dir_path(__FILE__) . '../assets/js/front.js';
+    $js_url = plugin_dir_url(__FILE__) . '../assets/js/front.js';
+
+    $version = file_exists($js_file) ? filemtime($js_file) : time();
+
     wp_enqueue_script(
         'batch-id-front-js',
-        plugin_dir_url(__FILE__) . '../assets/js/front.js',
+        $js_url,
         [],
-        false,
+        $version,
         true
     );
 }
