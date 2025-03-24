@@ -1,6 +1,6 @@
 <?php
 /**
- * @var string $batch_status
+ * @var string $batch_status Message status (success/error)
  * @var string $batch_message
  * @var array $batch_data
  * @var int $total_batches
@@ -48,7 +48,7 @@ if (!defined('ABSPATH')) exit;
 <?php if (!empty($batch_data)) : ?>
     <div class="batch-container">
         <?php foreach ($batch_data as $batch) : ?>
-            <div class="batch-column" data-batch-id="<?php echo esc_attr($batch['batch_id']); ?>">
+            <div class="batch-column <?= $batch['css_class']; ?>" data-batch-id="<?php echo esc_attr($batch['batch_id']); ?>">
                 <div class="batch-header"><?php echo esc_html("Batch ID " . $batch['batch_id']); ?></div>
                 <?php foreach ($batch['barcodes'] as $barcode) : ?>
                     <div class="barcode-container">
