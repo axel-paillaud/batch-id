@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap');
 
+:root {
+    /* blue */
+    --batch-type-prepayed-color-light: #ebf5f7;
+    --batch-type-prepayed-color: #b5d5dd;
+
+    /* gray */
+    --batch-type-float-color-light: #f6f6f6;
+    --batch-type-float-color: #cecece;
+}
+
 .batch-id-title {
     margin-bottom: 10px;
 }
@@ -128,6 +138,20 @@
 
 #batch-search-input::placeholder {
     color: #aaa;
+}
+
+/* Batch type color */
+.batch-container > .batch-column.batch-type-prepayed {
+    background-color: var(--batch-type-prepayed-color-light);
+}
+.batch-container > .batch-column.batch-type-prepayed > .batch-header {
+    background-color: var(--batch-type-prepayed-color);
+}
+.batch-container > .batch-column.batch-type-float {
+    background-color: var(--batch-type-float-color-light);
+}
+.batch-container > .batch-column.batch-type-float > .batch-header {
+    background-color: var(--batch-type-float-color);
 }
 
 /* Responsive */
