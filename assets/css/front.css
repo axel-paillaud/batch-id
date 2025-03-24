@@ -98,6 +98,13 @@
 }
 
 /* Batch search */
+.batch-filter-container {
+    display: flex;
+    gap: 16px;
+    height: 50px;
+    margin-bottom: 16px;
+}
+
 .batch-search {
     position: relative;
     width: 100%;
@@ -140,6 +147,17 @@
     color: #aaa;
 }
 
+.batch-filter-type {
+    max-width: 300px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 2px solid #bad2d8;
+}
+
+.batch-filter-type:focus {
+    border-color: #18798f;
+}
+
 /* Batch type color */
 .batch-container > .batch-column.batch-type-prepayed {
     background-color: var(--batch-type-prepayed-color-light);
@@ -163,5 +181,10 @@
 
     .batch-add form {
         flex-direction: column;
+    }
+
+    .batch-filter-container {
+        flex-direction: column;
+        align-items: center;
     }
 }

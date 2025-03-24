@@ -48,7 +48,7 @@ if (!defined('ABSPATH')) exit;
     </div>
 
     <label hidden for="batch-filter-type"><?php _e('Filter by Type:', 'batch-id'); ?></label>
-    <select id="batch-filter-type">
+    <select id="batch-filter-type" class="batch-filter-type">
         <option value=""><?php _e('All Types', 'batch-id'); ?></option>
         <?php foreach ($batch_types as $type_id => $type) : ?>
         <option value="<?= esc_attr($type->name); ?>"><?= esc_html($type->name); ?></option>
