@@ -13,7 +13,7 @@ function batch_id_create_tables() {
     $sql_batch_types = "CREATE TABLE $table_batch_types (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
-        description TEXT DEFAULT NULL,
+        lang TEXT DEFAULT NULL,
         prefix INT NOT NULL UNIQUE
     ) $charset_collate;";
 
@@ -54,7 +54,61 @@ function batch_id_create_tables() {
     dbDelta($sql_batch_ids);
     dbDelta($sql_barcodes);
 
-    // Insert default types
-    $wpdb->insert($table_batch_types, ['id' => 1, 'name' => 'Prepayed', 'description' => 'Prepaid Batch', 'prefix' => 1]);
-    $wpdb->insert($table_batch_types, ['id' => 2, 'name' => 'Float', 'description' => 'Floating Batch', 'prefix' => 2]);
+    // Insert default batch types
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 1, 
+            'name'   => 'float', 
+            'lang'   => 'Floating', 
+            'prefix' => 0
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 2, 
+            'name'   => 'plasmid-amplicon', 
+            'lang'   => 'Plasmid Amplicon', 
+            'prefix' => 1
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 3, 
+            'name'   => 'genome', 
+            'lang'   => 'Genome', 
+            'prefix' => 2
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 4, 
+            'name'   => 'sanger-premixed', 
+            'lang'   => 'Sanger Premixed', 
+            'prefix' => 3
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 5, 
+            'name'   => 'sanger-premium', 
+            'lang'   => 'Sanger Premium', 
+            'prefix' => 4
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 6, 
+            'name'   => 'meta-16s', 
+            'lang'   => 'Meta 16S', 
+            'prefix' => 5
+        ]
+    );
+    $wpdb->insert(
+        $table_batch_types, [
+            'id'     => 7, 
+            'name'   => 'specific-project', 
+            'lang'   => 'Specific Project', 
+            'prefix' => 6
+        ]
+    );
 }
