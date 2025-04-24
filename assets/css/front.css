@@ -20,6 +20,10 @@
     /* orange */
     --batch-type-sanger-premixed-color-light: #FFF6F2;
     --batch-type-sanger-premixed-color: #FBE2D5;
+
+    /* orange, same as sanger premixed */
+    --batch-type-sanger-premium-color-light: #FFF6F2;
+    --batch-type-sanger-premium-color: #FBE2D5;
 }
 
 .batch-id-title {
@@ -206,6 +210,12 @@
 }
 .batch-container > .batch-column.batch-type-sanger-premixed > .batch-header {
     background-color: var(--batch-type-sanger-premixed-color);
+}
+.batch-container > .batch-column.batch-type-sanger-premium {
+    background-color: var(--batch-type-sanger-premium-color-light);
+}
+.batch-container > .batch-column.batch-type-sanger-premium > .batch-header {
+    background-color: var(--batch-type-sanger-premium-color);
 }
 
 /* Responsive */
