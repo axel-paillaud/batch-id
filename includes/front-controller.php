@@ -76,11 +76,11 @@ function batch_id_display_front_page() {
     $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     // Load batch types for CSS mapping
-    $batch_types = $wpdb->get_results("SELECT id, name FROM $table_batch_types", OBJECT_K);
-    $batch_types_classes = [
-        1 => 'batch-type-prepayed',
-        2 => 'batch-type-float'
-    ];
+    $batch_types = $wpdb->get_results("SELECT * FROM $table_batch_types", OBJECT_K);
+    // $batch_types_classes = [
+    //     1 => 'batch-type-prepayed',
+    //     2 => 'batch-type-float'
+    // ];
 
     // Load Batch IDs linked to the user
     $batch_ids = $wpdb->get_results($wpdb->prepare(
@@ -105,8 +105,9 @@ function batch_id_display_front_page() {
             $batch_data[] = [
                 'batch_id' => $batch->batch_id,
                 'barcodes' => $barcodes,
-                'type' => $batch_types[$batch->type_id]->name ?? 'Unknown',
-                'css_class' => $batch_types_classes[$batch->type_id] ?? 'batch-type-unknown'
+                'type_lang' => $batch_types[$batch->type_id]->lang ?? 'Unknown',
+                'type_name' => $batch_types[$batch->type_id]->name ?? 'unknown',
+                // 'css_class' => $batch_types_classes[$batch->type_id] ?? 'batch-type-unknown'
             ];
         }
     }

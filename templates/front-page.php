@@ -51,7 +51,7 @@ if (!defined('ABSPATH')) exit;
     <select id="batch-filter-type" class="batch-filter-type">
         <option value=""><?php _e('All Types', 'batch-id'); ?></option>
         <?php foreach ($batch_types as $type_id => $type) : ?>
-        <option value="<?= esc_attr($type->name); ?>"><?= esc_html($type->name); ?></option>
+        <option value="<?= esc_attr($type->name); ?>"><?= esc_html($type->lang); ?></option>
         <?php endforeach; ?>
     </select>
 </div>
@@ -60,9 +60,9 @@ if (!defined('ABSPATH')) exit;
     <div class="batch-container">
         <?php foreach ($batch_data as $batch) : ?>
             <div
-                class="batch-column <?= esc_attr($batch['css_class']); ?>"
+                class="batch-column <?= esc_attr($batch['type_name']); ?>"
                 data-batch-id="<?= esc_attr($batch['batch_id']); ?>"
-                data-batch-type="<?= esc_attr($batch['type']); ?>"
+                data-batch-type="<?= esc_attr($batch['type_name']); ?>"
             >
                 <div class="batch-header"><?php echo esc_html("Batch ID " . $batch['batch_id']); ?></div>
                 <?php foreach ($batch['barcodes'] as $barcode) : ?>
