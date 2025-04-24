@@ -60,7 +60,7 @@ if (!defined('ABSPATH')) exit;
     <div class="batch-container">
         <?php foreach ($batch_data as $batch) : ?>
             <div
-                class="batch-column <?= esc_attr($batch['type_name']); ?>"
+                class="batch-column batch-type-<?= esc_attr($batch['type_name']); ?>"
                 data-batch-id="<?= esc_attr($batch['batch_id']); ?>"
                 data-batch-type="<?= esc_attr($batch['type_name']); ?>"
             >

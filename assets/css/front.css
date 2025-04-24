@@ -171,6 +171,12 @@
 .batch-container > .batch-column.batch-type-float > .batch-header {
     background-color: var(--batch-type-float-color);
 }
+.batch-container > .batch-column.batch-type-unknown {
+    background-color: var(--batch-type-float-color-light);
+}
+.batch-container > .batch-column.batch-type-unknown > .batch-header {
+    background-color: var(--batch-type-float-color);
+}
 
 /* Responsive */
 
