@@ -14,9 +14,9 @@ if (!defined('ABSPATH')) {
  */
 function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity = 1) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
-    $table_batch_types = $wpdb->prefix . 'batch_types';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     // Validate Batch ID format
     if (!preg_match('/^\d{9}$/', $batch_id)) {
@@ -100,7 +100,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
  */
 function batch_id_delete($batch_id) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
 
     $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
 
@@ -114,8 +114,8 @@ function batch_id_delete($batch_id) {
 
 function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
 
     $offset = ($page - 1) * $per_page;
 
@@ -165,7 +165,8 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
 
 function batch_id_admin_page() {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     $response = ['success' => true, 'message' => ''];
 
@@ -185,7 +186,7 @@ function batch_id_admin_page() {
     }
 
     // Get all batch types
-    $types = $wpdb->get_results("SELECT id, name FROM " . $wpdb->prefix . "batch_types");
+    $types = $wpdb->get_results("SELECT id, name FROM " . $table_batch_types);
 
     // Get pagination info
     $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;

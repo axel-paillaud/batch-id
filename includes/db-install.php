@@ -9,7 +9,7 @@ function batch_id_create_tables() {
     $charset_collate = $wpdb->get_charset_collate();
 
     // Batch Types table
-    $table_batch_types = $wpdb->prefix . 'batch_types';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
     $sql_batch_types = "CREATE TABLE $table_batch_types (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
@@ -18,7 +18,7 @@ function batch_id_create_tables() {
     ) $charset_collate;";
 
     // Batch ID table
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
     $sql_batch_ids = "CREATE TABLE $table_batch_ids (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         batch_id VARCHAR(20) NOT NULL UNIQUE,
@@ -35,7 +35,7 @@ function batch_id_create_tables() {
     ) $charset_collate;";
 
     // Barcode table
-    $table_barcodes = $wpdb->prefix . 'barcodes';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
     $sql_barcodes = "CREATE TABLE $table_barcodes (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         barcode VARCHAR(30) NOT NULL UNIQUE,

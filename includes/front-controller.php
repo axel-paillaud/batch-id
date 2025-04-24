@@ -12,8 +12,8 @@ if (!defined('ABSPATH')) {
 function batch_id_claim_batch(int $batch_id) {
     global $wpdb;
     $user_id = get_current_user_id();
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
 
     $batch_id = isset($_POST['claim_batch_id']) ? trim($_POST['claim_batch_id']) : '';
 
@@ -71,9 +71,9 @@ function batch_id_display_front_page() {
     }
 
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
-    $table_batch_types = $wpdb->prefix . 'batch_types';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     // Load batch types for CSS mapping
     $batch_types = $wpdb->get_results("SELECT id, name FROM $table_batch_types", OBJECT_K);
