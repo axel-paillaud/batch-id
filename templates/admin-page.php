@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) exit;
             >
                 <?php
                 foreach ($types as $type) {
-                    echo '<option value="' . esc_attr($type->prefix) . '">' . esc_html($type->name) . '</option>';
+                    echo '<option value="' . esc_attr($type->prefix) . '">' . esc_html($type->lang) . '</option>';
                 }
                 ?>
             </select>
