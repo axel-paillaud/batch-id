@@ -5,9 +5,9 @@
     --batch-type-prepayed-color-light: #ebf5f7;
     --batch-type-prepayed-color: #b5d5dd;
 
-    /* gray */
-    --batch-type-float-color-light: #f6f6f6;
-    --batch-type-float-color: #cecece;
+    /* white */
+    --batch-type-float-color-light: #FFFFFF;
+    --batch-type-float-color: #FFFFFF;
 
     /* blue */
     --batch-type-plasmid-amplicon-color-light: #E4F3F9;
