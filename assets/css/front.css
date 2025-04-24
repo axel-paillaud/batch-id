@@ -28,6 +28,10 @@
     /* green */
     --batch-type-meta-16s-color-light: #EEF7EB;
     --batch-type-meta-16s-color: #DAF2D0;
+
+    /* ? */
+    --batch-type-specific-project-color-light: #F4E9F3;
+    --batch-type-specific-project-color: #F2CEEF;
 }
 
 .batch-id-title {
@@ -226,6 +230,12 @@
 }
 .batch-container > .batch-column.batch-type-meta-16s > .batch-header {
     background-color: var(--batch-type-meta-16s-color);
+}
+.batch-container > .batch-column.batch-type-specific-project {
+    background-color: var(--batch-type-specific-project-color-light);
+}
+.batch-container > .batch-column.batch-type-specific-project > .batch-header {
+    background-color: var(--batch-type-specific-project-color);
 }
 
 /* Responsive */
