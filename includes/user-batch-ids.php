@@ -13,8 +13,8 @@ if (!defined('ABSPATH')) exit;
  */
 function batch_id_get_user_batches($user_id) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'batch_ids';
-    $table_barcodes = $wpdb->prefix . 'barcodes';
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
 
     // Retrieve all Batch IDs assigned to this user
     $all_batches = $wpdb->get_results($wpdb->prepare(
