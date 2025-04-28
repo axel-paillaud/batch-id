@@ -36,7 +36,7 @@ if (!defined('ABSPATH')) exit;
 </div>
 
 <div class="batch-id-title">
-    <h2>Your available barcodes</h2>
+    <h2>Your labels available</h2>
     <p><?php echo $total_batches; ?> batch IDs</p>
 </div>
 
