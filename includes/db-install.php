@@ -58,58 +58,65 @@ function batch_id_create_tables() {
     // Insert default batch types
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 1, 
-            'name'   => 'float', 
-            'lang'   => 'Floating', 
-            'prefix' => 0
+            'id'     => 1,
+            'name'   => 'float',
+            'lang'   => 'Floating',
+            'prefix' => 0,
+            'color'  => '#FFFFFF'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 2, 
-            'name'   => 'plasmid-amplicon', 
-            'lang'   => 'Plasmid Amplicon', 
-            'prefix' => 1
+            'id'     => 2,
+            'name'   => 'plasmid-amplicon',
+            'lang'   => 'Plasmid Amplicon',
+            'prefix' => 1,
+            'color'  => '#CAEDFB'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 3, 
-            'name'   => 'genome', 
-            'lang'   => 'Genome', 
-            'prefix' => 2
+            'id'     => 3,
+            'name'   => 'genome',
+            'lang'   => 'Genome',
+            'prefix' => 2,
+            'color'  => '#FFCCCC'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 4, 
-            'name'   => 'sanger-premixed', 
-            'lang'   => 'Sanger Premixed', 
-            'prefix' => 3
+            'id'     => 4,
+            'name'   => 'sanger-premixed',
+            'lang'   => 'Sanger Premixed',
+            'prefix' => 3,
+            'color'  => '#FBE2D5'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 5, 
-            'name'   => 'sanger-premium', 
-            'lang'   => 'Sanger Premium', 
-            'prefix' => 4
+            'id'     => 5,
+            'name'   => 'sanger-premium',
+            'lang'   => 'Sanger Premium',
+            'prefix' => 4,
+            'color'  => '#FBE2D5'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 6, 
-            'name'   => 'meta-16s', 
-            'lang'   => 'Meta 16S', 
-            'prefix' => 5
+            'id'     => 6,
+            'name'   => 'meta-16s',
+            'lang'   => 'Meta 16S',
+            'prefix' => 5,
+            'color'  => '#DAF2D0'
         ]
     );
     $wpdb->insert(
         $table_batch_types, [
-            'id'     => 7, 
-            'name'   => 'specific-project', 
-            'lang'   => 'Specific Project', 
-            'prefix' => 6
+            'id'     => 7,
+            'name'   => 'specific-project',
+            'lang'   => 'Specific Project',
+            'prefix' => 6,
+            'color'  => '#F2CEEF'
         ]
     );
 }
