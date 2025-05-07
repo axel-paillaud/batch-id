@@ -6,6 +6,10 @@
     margin: 32px 0;
 }
 
+.add-batch-type-form-ctn {
+    flex: 0 0 250px;
+}
+
 .add-batch-type-form {
     display: flex;
     gap: 16px;
@@ -22,6 +26,15 @@
 
 #batch-type-table tbody > tr > td {
     line-height: 2.15;
+}
+
+.batch-color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+    margin-right: 6px;
 }
 
 /* Batch ID */
@@ -49,7 +62,8 @@
     border: 1px solid #f5c6cb;
 }
 
-.batch-id-delete-form .button-link-delete {
+.batch-id-delete-form .button-link-delete,
+.batch-type-delete-form .button-link-delete {
     display: flex;
     align-items: center;
 }
@@ -84,4 +98,10 @@
 #batch-id-table tbody tr td.used {
     color: #9f0404;
     text-decoration: line-through;
+}
+
+@media screen and (width <= 1280px) {
+    .add-batch-type {
+        flex-direction: column;
+    }
 }

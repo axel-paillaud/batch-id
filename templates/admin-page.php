@@ -63,8 +63,8 @@ if (!defined('ABSPATH')) exit;
                         <td><?php echo esc_html($type->lang); ?></td>
                         <td><?php echo esc_html($type->prefix); ?></td>
                         <td>
-                            <span style="background: <?= esc_attr($type->color); ?>; display:inline-block; width:20px; height:20px; border:1px solid #ccc;"></span>
-                            <code style="margin-left:5px;"><?= esc_html($type->color); ?></code>
+                            <span class="batch-color-preview" style="background: <?= esc_attr($type->color); ?>;"></span>
+                            <cod ><?= esc_html($type->color); ?></code>
                         </td>
                         <td>
                             <form method="post" class="batch-type-delete-form" onsubmit="return confirm('Delete this batch type?');">
