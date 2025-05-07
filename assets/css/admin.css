@@ -1,6 +1,6 @@
 /* Add batch type */
 
-.add-batch-type {
+.add-batch-type, .add-batch-id {
     display: flex;
     gap: 32px;
     margin: 32px 0;
@@ -19,6 +19,16 @@
 .add-batch-type-form > div > label {
     display: block;
 }
+
+.add-batch-type-form > div > input,
+.add-batch-id-form > div > input {
+    width: 100%;
+} 
+
+.add-batch-type-form > div > select,
+.add-batch-id-form > div > select {
+    width: 100%;
+} 
 
 #batch-type-table tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
@@ -39,9 +49,18 @@
 
 /* Batch ID */
 
-#batch-id-form {
+.add-batch-id-form-ctn {
+    flex: 0 0 250px;
+}
+
+.add-batch-id-form {
     display: flex;
     gap: 16px;
+    flex-direction: column;
+}
+
+.add-batch-id-form > div > label {
+    display: block;
 }
 
 #batch-id-message {
@@ -101,7 +120,7 @@
 }
 
 @media screen and (width <= 1280px) {
-    .add-batch-type {
+    .add-batch-type, .add-batch-id {
         flex-direction: column;
     }
 }
