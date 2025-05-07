@@ -14,7 +14,8 @@ function batch_id_create_tables() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         lang TEXT DEFAULT NULL,
-        prefix INT NOT NULL UNIQUE
+        prefix INT NOT NULL UNIQUE,
+        color VARCHAR(9) DEFAULT NULL
     ) $charset_collate;";
 
     // Batch ID table
