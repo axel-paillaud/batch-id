@@ -45,6 +45,7 @@ if (!defined('ABSPATH')) exit;
             </form>
         </div>
         <div class="batch-type-show-ctn">
+            <h2><?php _e('Existing batch type.', 'batch-id'); ?></h2>
             <?php if (!empty($types)) : ?>
             <table id="batch-type-table" class="widefat fixed">
                 <thead>
