@@ -1,3 +1,15 @@
+/* Add batch type */
+
+.add-batch-type-form {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+}
+
+.add-batch-type-form > div > label {
+    display: block;
+}
+
 #batch-id-form {
     display: flex;
     gap: 16px;

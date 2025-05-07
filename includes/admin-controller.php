@@ -178,10 +178,32 @@ function batch_id_admin_page() {
             $customer_id = (isset($_POST['customer_id']) && $_POST['customer_id'] !== '') ? intval($_POST['customer_id']) : NULL;
             $quantity = isset($_POST['quantity']) ? max(1, intval($_POST['quantity'])) : 1;
             $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
-        } elseif (isset($_POST['delete_batch_id'])) {
+        } 
+        
+        if (isset($_POST['delete_batch_id'])) {
             // Process Batch ID deletion
             $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
             $response = batch_id_delete($batch_id_to_delete);
+        }
+
+        if (isset($_POST['add_batch_type'])) {
+            $name = sanitize_title($_POST['batch_name']);
+            $lang = sanitize_text_field($_POST['batch_lang']);
+            $prefix = intval($_POST['batch_prefix']);
+            $color = sanitize_hex_color($_POST['batch_color']);
+
+            $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE prefix = %d", $prefix));
+            if ($exists) {
+                $response = ['success' => false, 'message' => '<div class="notice notice-error"><p>This prefix already exists.</p></div>'];
+            } else {
+                $wpdb->insert($table_batch_types, [
+                    'name'   => $name,
+                    'lang'   => $lang,
+                    'prefix' => $prefix,
+                    'color'  => $color ?: null,
+                ]);
+                $response = ['success' => true, 'message' => '<div class="notice notice-success"><p>New batch type added.</p></div>'];
+            }
         }
     }
 

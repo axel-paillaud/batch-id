@@ -19,6 +19,36 @@ if (!defined('ABSPATH')) exit;
 
     <div id="batch-id-message" style="display: none;"></div>
 
+    <div class="add-batch-type">
+        <h2><?php _e('Add a new batch type.', 'batch-id'); ?></h2>
+        <form method="post" class="add-batch-type-form">
+            <div>
+                <label for="batch_name"><?php _e('Slug (ex: plasmid-amplicon)', 'batch-id'); ?></label>
+                <input type="text" id="batch_name" name="batch_name" required />
+            </div>
+            <div>
+                <label for="batch_lang"><?php _e('Complete name (ex: Plasmid / Amplicon)', 'batch-id'); ?></label>
+                <input type="text" id="batch_lang" name="batch_lang" required />
+            </div>
+            <div>
+                <label for="batch_prefix"><?php _e('Prefix ID (ex: 7)', 'batch-id'); ?></label>
+                <input type="number" id="batch_prefix" name="batch_prefix" required />
+            </div>
+            <div>
+                <label for="batch_color"><?php _e('Hexadecimal color', 'batch-id'); ?></label>
+                <input type="color" id="batch_color" name="batch_color" value="#cccccc" />
+            </div>
+            <div>
+                <button type="submit" name="add_batch_type" class="button button-secondary"><?php _e('Add this batch type', 'batch-id'); ?></button>
+            </div>
+        </form>
+    </div>
+
+    <hr>
+
+
+    <h2><?php _e('Add a new batch ID.', 'batch-id'); ?></h2>
+
     <form method="post" id="batch-id-form">
 
         <div>
