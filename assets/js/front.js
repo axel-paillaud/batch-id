@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const typeFilter = document.getElementById("batch-filter-type");
   const batchColumns = document.querySelectorAll("[data-batch-id]");
 
+  if (!searchInput || !typeFilter) {
+    return;
+  }
+
   function filterBatches() {
     const searchValue = searchInput.value.trim().toLowerCase();
     const selectedType = typeFilter.value.toLowerCase();
