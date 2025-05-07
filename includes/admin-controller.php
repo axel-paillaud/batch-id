@@ -192,9 +192,12 @@ function batch_id_admin_page() {
             $prefix = intval($_POST['batch_prefix']);
             $color = sanitize_hex_color($_POST['batch_color']);
 
-            $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE prefix = %d", $prefix));
-            if ($exists) {
+            $prefix_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE prefix = %d", $prefix));
+            $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
+            if ($prefix_exists) {
                 $response = ['success' => false, 'message' => '<div class="notice notice-error"><p>This prefix already exists.</p></div>'];
+            } elseif ($name_exists) {
+                $response = ['success' => false, 'message' => '<div class="notice notice-error"><p>This slug is already in use.</p></div>'];
             } else {
                 $wpdb->insert($table_batch_types, [
                     'name'   => $name,
