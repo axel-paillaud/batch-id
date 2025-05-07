@@ -22,7 +22,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     if (!preg_match('/^\d{9}$/', $batch_id)) {
         return [
             'success' => false,
-            'message' => '<div class="notice notice-error"><p>' . __('Invalid Batch ID format, should contain 9 digits.', 'batch-id') . '</p></div>'
+            'message' => __('Invalid Batch ID format, should contain 9 digits.', 'batch-id')
         ];
     }
 
@@ -30,7 +30,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     if ($quantity < 1) {
         return [
             'success' => false,
-            'message' => '<div class="notice notice-error"><p>' . __('Quantity must be at least 1.', 'batch-id') . '</p></div>'
+            'message' => __('Quantity must be at least 1.', 'batch-id')
         ];
     }
 
@@ -40,7 +40,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     if (!$batch_type) {
         return [
             'success' => false,
-            'message' => '<div class="notice notice-error"><p>' . __('Invalid batch type selected.', 'batch-id') . '</p></div>'
+            'message' => __('Invalid batch type selected.', 'batch-id')
         ];
     }
 
@@ -81,13 +81,13 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     if (empty($created_batches)) {
         return [
             'success' => false,
-            'message' => '<div class="notice notice-error"><p>' . __('No new Batch ID created. Some already existed.', 'batch-id') . '</p></div>'
+            'message' => __('No new Batch ID created. Some already existed.', 'batch-id')
         ];
     }
 
     return [
         'success' => true,
-        'message' => '<div class="notice notice-success"><p>' . sprintf(__('Successfully created %d Batch IDs.', 'batch-id'), count($created_batches)) . '</p></div>'
+        'message' => sprintf(__('Successfully created %d Batch IDs.', 'batch-id'), count($created_batches))
     ];
 }
 
@@ -106,10 +106,16 @@ function batch_id_delete($batch_id) {
 
     if ($exists) {
         $wpdb->delete($table_batch_ids, ['batch_id' => $batch_id]);
-        return ['success' => true, 'message' => '<div class="notice notice-success"><p>' . __('Batch ID deleted successfully.', 'batch-id') . '</p></div>'];
+        return [
+            'success' => true, 
+            'message' => __('Batch ID deleted successfully.', 'batch-id')
+        ];
     }
 
-    return ['success' => false, 'message' => '<div class="notice notice-error"><p>' . __('This Batch ID does not exist.', 'batch-id') . '</p></div>'];
+    return [
+        'success' => false, 
+        'message' => __('This Batch ID does not exist.', 'batch-id')
+    ];
 }
 
 function batch_id_get_admin_batches($page = 1, $per_page = 13) {
@@ -195,9 +201,15 @@ function batch_id_admin_page() {
             $prefix_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE prefix = %d", $prefix));
             $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
             if ($prefix_exists) {
-                $response = ['success' => false, 'message' => '<div class="notice notice-error"><p>This prefix already exists.</p></div>'];
+                $response = [
+                    'success' => false, 
+                    'message' => __('This prefix already exists.', 'batch-id'),
+                ];
             } elseif ($name_exists) {
-                $response = ['success' => false, 'message' => '<div class="notice notice-error"><p>This slug is already in use.</p></div>'];
+                $response = [
+                    'success' => false, 
+                    'message' => __('This slug is already in use.', 'batch-id'),
+                ];
             } else {
                 $wpdb->insert($table_batch_types, [
                     'name'   => $name,
@@ -205,7 +217,10 @@ function batch_id_admin_page() {
                     'prefix' => $prefix,
                     'color'  => $color ?: null,
                 ]);
-                $response = ['success' => true, 'message' => '<div class="notice notice-success"><p>New batch type added.</p></div>'];
+                $response = [
+                    'success' => true, 
+                    'message' => __('New batch type added.', 'batch-id'),
+                ];
             }
         }
 
@@ -217,12 +232,12 @@ function batch_id_admin_page() {
             if ($deleted) {
                 $response = [
                     'success' => true,
-                    'message' => '<div class="notice notice-success"><p>' . __('Batch type and all related Batch IDs deleted.', 'batch-id') . '</p></div>'
+                    'message' => __('Batch type and all related Batch IDs deleted.', 'batch-id')
                 ];
             } else {
                 $response = [
                     'success' => false,
-                    'message' => '<div class="notice notice-error"><p>' . __('Deletion failed.', 'batch-id') . '</p></div>'
+                    'message' => __('Deletion failed.', 'batch-id')
                 ];
             }
         }

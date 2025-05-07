@@ -15,7 +15,11 @@ if (!defined('ABSPATH')) exit;
 <div class="wrap">
     <h1><?php _e('Batch ID Settings', 'batch-id'); ?></h1>
 
-    <?php echo $response['message']; ?>
+    <?php if (!empty($response['message'])) : ?>
+    <div class="notice <?php echo $response['success'] ? 'notice-success' : 'notice-error'; ?>">
+        <p><?php echo esc_html($response['message']); ?></p>
+    </div>
+    <?php endif; ?>
 
     <div id="batch-id-message" style="display: none;"></div>
 
