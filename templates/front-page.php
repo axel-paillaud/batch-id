@@ -10,6 +10,31 @@
 if (!defined('ABSPATH')) exit;
 ?>
 
+<!-- Handle CSS custom colors from database -->
+<style>
+<?php foreach ($batch_types as $type): 
+    $base_color = $type->color ?: '#CCCCCC';
+
+    // light color version
+    //ex : #FBE2D5 => #FBE2D54D
+    $light_color = strtoupper($base_color) . '4D';
+?>
+.batch-container > .batch-column.batch-type-<?= esc_attr($type->name); ?> {
+    background-color: <?= esc_html($light_color); ?>;
+}
+.batch-container > .batch-column.batch-type-<?= esc_attr($type->name); ?> > .batch-header {
+    background-color: <?= esc_html($base_color); ?>;
+}
+<?php endforeach; ?>
+
+.batch-container > .batch-column.batch-type-unknown {
+    background-color: #CCCCCC0D;
+}
+.batch-container > .batch-column.batch-type-unknown > .batch-header {
+    background-color: #CCCCCC;
+}
+</style>
+
 <div class="batch-add">
     <h2><?php _e('Claim a Batch ID', 'batch-id'); ?></h2>
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">

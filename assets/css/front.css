@@ -1,39 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap');
 
-:root {
-    /* blue */
-    --batch-type-prepayed-color-light: #ebf5f7;
-    --batch-type-prepayed-color: #b5d5dd;
-
-    /* white */
-    --batch-type-float-color-light: #FFFFFF;
-    --batch-type-float-color: #FFFFFF;
-
-    /* blue */
-    --batch-type-plasmid-amplicon-color-light: #E4F3F9;
-    --batch-type-plasmid-amplicon-color: #CAEDFB;
-
-    /* red */
-    --batch-type-genome-color-light: #FFF0F0;
-    --batch-type-genome-color: #FFCCCC;
-
-    /* orange */
-    --batch-type-sanger-premixed-color-light: #FFF6F2;
-    --batch-type-sanger-premixed-color: #FBE2D5;
-
-    /* orange, same as sanger premixed */
-    --batch-type-sanger-premium-color-light: #FFF6F2;
-    --batch-type-sanger-premium-color: #FBE2D5;
-
-    /* green */
-    --batch-type-meta-16s-color-light: #EEF7EB;
-    --batch-type-meta-16s-color: #DAF2D0;
-
-    /* ? */
-    --batch-type-specific-project-color-light: #F4E9F3;
-    --batch-type-specific-project-color: #F2CEEF;
-}
-
 .batch-id-title {
     margin-bottom: 10px;
 }
@@ -180,62 +146,6 @@
 
 .batch-filter-type:focus {
     border-color: #18798f;
-}
-
-/* Batch type color */
-.batch-container > .batch-column.batch-type-prepayed {
-    background-color: var(--batch-type-prepayed-color-light);
-}
-.batch-container > .batch-column.batch-type-prepayed > .batch-header {
-    background-color: var(--batch-type-prepayed-color);
-}
-.batch-container > .batch-column.batch-type-float {
-    background-color: var(--batch-type-float-color-light);
-}
-.batch-container > .batch-column.batch-type-float > .batch-header {
-    background-color: var(--batch-type-float-color);
-}
-.batch-container > .batch-column.batch-type-unknown {
-    background-color: var(--batch-type-float-color-light);
-}
-.batch-container > .batch-column.batch-type-unknown > .batch-header {
-    background-color: var(--batch-type-float-color);
-}
-.batch-container > .batch-column.batch-type-plasmid-amplicon {
-    background-color: var(--batch-type-plasmid-amplicon-color-light);
-}
-.batch-container > .batch-column.batch-type-plasmid-amplicon > .batch-header {
-    background-color: var(--batch-type-plasmid-amplicon-color);
-}
-.batch-container > .batch-column.batch-type-genome {
-    background-color: var(--batch-type-genome-color-light);
-}
-.batch-container > .batch-column.batch-type-genome > .batch-header {
-    background-color: var(--batch-type-genome-color);
-}
-.batch-container > .batch-column.batch-type-sanger-premixed {
-    background-color: var(--batch-type-sanger-premixed-color-light);
-}
-.batch-container > .batch-column.batch-type-sanger-premixed > .batch-header {
-    background-color: var(--batch-type-sanger-premixed-color);
-}
-.batch-container > .batch-column.batch-type-sanger-premium {
-    background-color: var(--batch-type-sanger-premium-color-light);
-}
-.batch-container > .batch-column.batch-type-sanger-premium > .batch-header {
-    background-color: var(--batch-type-sanger-premium-color);
-}
-.batch-container > .batch-column.batch-type-meta-16s {
-    background-color: var(--batch-type-meta-16s-color-light);
-}
-.batch-container > .batch-column.batch-type-meta-16s > .batch-header {
-    background-color: var(--batch-type-meta-16s-color);
-}
-.batch-container > .batch-column.batch-type-specific-project {
-    background-color: var(--batch-type-specific-project-color-light);
-}
-.batch-container > .batch-column.batch-type-specific-project > .batch-header {
-    background-color: var(--batch-type-specific-project-color);
 }
 
 /* Responsive */

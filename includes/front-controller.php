@@ -107,7 +107,7 @@ function batch_id_display_front_page() {
                 'barcodes' => $barcodes,
                 'type_lang' => $batch_types[$batch->type_id]->lang ?? 'Unknown',
                 'type_name' => $batch_types[$batch->type_id]->name ?? 'unknown',
-                // 'css_class' => $batch_types_classes[$batch->type_id] ?? 'batch-type-unknown'
+                'color' => $batch_types[$batch->type_id]->color ?? '#cccccc',
             ];
         }
     }
