@@ -1,5 +1,11 @@
 /* Add batch type */
 
+.add-batch-type {
+    display: flex;
+    gap: 32px;
+    margin: 32px 0;
+}
+
 .add-batch-type-form {
     display: flex;
     gap: 16px;
@@ -9,6 +15,16 @@
 .add-batch-type-form > div > label {
     display: block;
 }
+
+#batch-type-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#batch-type-table tbody > tr > td {
+    line-height: 2.15;
+}
+
+/* Batch ID */
 
 #batch-id-form {
     display: flex;
