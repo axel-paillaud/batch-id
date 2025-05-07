@@ -68,7 +68,7 @@ if (!defined('ABSPATH')) exit;
                             <cod ><?= esc_html($type->color); ?></code>
                         </td>
                         <td>
-                            <form method="post" class="batch-type-delete-form" onsubmit="return confirm('Delete this batch type?');">
+                            <form method="post" class="batch-type-delete-form" onsubmit="return confirm('Are you sure you want to delete this batch type?\n\n⚠️ All related Batch IDs and their barcodes will also be permanently deleted.');">
                                 <input type="hidden" name="delete_batch_type_id" value="<?php echo esc_attr($type->id); ?>" />
                                 <button type="submit" class="button button-link-delete">
                                     <span class="dashicons dashicons-trash"></span>

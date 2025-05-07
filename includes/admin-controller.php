@@ -205,6 +205,24 @@ function batch_id_admin_page() {
                 $response = ['success' => true, 'message' => '<div class="notice notice-success"><p>New batch type added.</p></div>'];
             }
         }
+
+        if (isset($_POST['delete_batch_type_id'])) {
+            $type_id = intval($_POST['delete_batch_type_id']);
+
+            $deleted = $wpdb->delete($table_batch_types, ['id' => $type_id]);
+
+            if ($deleted) {
+                $response = [
+                    'success' => true,
+                    'message' => '<div class="notice notice-success"><p>' . __('Batch type and all related Batch IDs deleted.', 'batch-id') . '</p></div>'
+                ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => '<div class="notice notice-error"><p>' . __('Deletion failed.', 'batch-id') . '</p></div>'
+                ];
+            }
+        }
     }
 
     // Get all batch types
