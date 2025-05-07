@@ -34,18 +34,20 @@ function batch_id_enqueue_front_styles() {
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_styles');
 
 function batch_id_enqueue_front_scripts() {
-    $js_file = plugin_dir_path(__FILE__) . '../assets/js/front.js';
-    $js_url = plugin_dir_url(__FILE__) . '../assets/js/front.js';
+    if (is_account_page() && is_wc_endpoint_url('batch-id')) {
+        $js_file = plugin_dir_path(__FILE__) . '../assets/js/front.js';
+        $js_url = plugin_dir_url(__FILE__) . '../assets/js/front.js';
 
-    $version = file_exists($js_file) ? filemtime($js_file) : time();
+        $version = file_exists($js_file) ? filemtime($js_file) : time();
 
-    wp_enqueue_script(
-        'batch-id-front-js',
-        $js_url,
-        [],
-        $version,
-        true
-    );
+        wp_enqueue_script(
+            'batch-id-front-js',
+            $js_url,
+            [],
+            $version,
+            true
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_scripts');
 
@@ -75,9 +77,13 @@ add_action('init', function() {
     add_rewrite_endpoint('batch-id', EP_ROOT | EP_PAGES);
 });
 
+add_filter('woocommerce_get_query_vars', function($vars) {
+    $vars['batch-id'] = 'batch-id';
+    return $vars;
+});
+
 // Handle the display of content on the "Batch ID" tab
 add_action('woocommerce_account_batch-id_endpoint', 'batch_id_display_front_page');
-
 
 function batch_id_search_customers() {
     global $wpdb;
