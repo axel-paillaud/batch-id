@@ -62,7 +62,7 @@ function batch_id_create_tables() {
             'name'   => 'float',
             'lang'   => 'Floating',
             'prefix' => 0,
-            'color'  => '#FFFFFF'
+            'color'  => '#ffffff'
         ]
     );
     $wpdb->insert(
@@ -71,7 +71,7 @@ function batch_id_create_tables() {
             'name'   => 'plasmid-amplicon',
             'lang'   => 'Plasmid Amplicon',
             'prefix' => 1,
-            'color'  => '#CAEDFB'
+            'color'  => '#caedfb'
         ]
     );
     $wpdb->insert(
@@ -80,7 +80,7 @@ function batch_id_create_tables() {
             'name'   => 'genome',
             'lang'   => 'Genome',
             'prefix' => 2,
-            'color'  => '#FFCCCC'
+            'color'  => '#ffcccc'
         ]
     );
     $wpdb->insert(
@@ -89,7 +89,7 @@ function batch_id_create_tables() {
             'name'   => 'sanger-premixed',
             'lang'   => 'Sanger Premixed',
             'prefix' => 3,
-            'color'  => '#FBE2D5'
+            'color'  => '#fbe2d5'
         ]
     );
     $wpdb->insert(
@@ -98,7 +98,7 @@ function batch_id_create_tables() {
             'name'   => 'sanger-premium',
             'lang'   => 'Sanger Premium',
             'prefix' => 4,
-            'color'  => '#FBE2D5'
+            'color'  => '#fbe2d5'
         ]
     );
     $wpdb->insert(
@@ -107,7 +107,7 @@ function batch_id_create_tables() {
             'name'   => 'meta-16s',
             'lang'   => 'Meta 16S',
             'prefix' => 5,
-            'color'  => '#DAF2D0'
+            'color'  => '#daf2d0'
         ]
     );
     $wpdb->insert(
@@ -116,7 +116,7 @@ function batch_id_create_tables() {
             'name'   => 'specific-project',
             'lang'   => 'Specific Project',
             'prefix' => 6,
-            'color'  => '#F2CEEF'
+            'color'  => '#f2ceef'
         ]
     );
 }
