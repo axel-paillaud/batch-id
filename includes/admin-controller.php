@@ -107,13 +107,13 @@ function batch_id_delete($batch_id) {
     if ($exists) {
         $wpdb->delete($table_batch_ids, ['batch_id' => $batch_id]);
         return [
-            'success' => true, 
+            'success' => true,
             'message' => __('Batch ID deleted successfully.', 'batch-id')
         ];
     }
 
     return [
-        'success' => false, 
+        'success' => false,
         'message' => __('This Batch ID does not exist.', 'batch-id')
     ];
 }
@@ -184,8 +184,8 @@ function batch_id_admin_page() {
             $customer_id = (isset($_POST['customer_id']) && $_POST['customer_id'] !== '') ? intval($_POST['customer_id']) : NULL;
             $quantity = isset($_POST['quantity']) ? max(1, intval($_POST['quantity'])) : 1;
             $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
-        } 
-        
+        }
+
         if (isset($_POST['delete_batch_id'])) {
             // Process Batch ID deletion
             $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
@@ -198,16 +198,10 @@ function batch_id_admin_page() {
             $prefix = intval($_POST['batch_prefix']);
             $color = sanitize_hex_color($_POST['batch_color']);
 
-            $prefix_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE prefix = %d", $prefix));
             $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
-            if ($prefix_exists) {
+            if ($name_exists) {
                 $response = [
-                    'success' => false, 
-                    'message' => __('This prefix already exists.', 'batch-id'),
-                ];
-            } elseif ($name_exists) {
-                $response = [
-                    'success' => false, 
+                    'success' => false,
                     'message' => __('This slug is already in use.', 'batch-id'),
                 ];
             } else {
@@ -218,7 +212,7 @@ function batch_id_admin_page() {
                     'color'  => $color ?: null,
                 ]);
                 $response = [
-                    'success' => true, 
+                    'success' => true,
                     'message' => __('New batch type added.', 'batch-id'),
                 ];
             }

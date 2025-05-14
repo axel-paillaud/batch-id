@@ -20,9 +20,11 @@ if (!defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'includes/db-install.php';
 require_once plugin_dir_path(__FILE__) . 'includes/db-uninstall.php';
+require_once plugin_dir_path(__FILE__) . 'includes/upgrade.php';
+
 require_once plugin_dir_path(__FILE__) . 'includes/admin-controller.php';
-require_once plugin_dir_path(__FILE__) . 'includes/user-batch-ids.php';
 require_once plugin_dir_path(__FILE__) . 'includes/front-controller.php';
+require_once plugin_dir_path(__FILE__) . 'includes/user-batch-ids.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hooks.php';
 
 function batch_id_load_textdomain() {
@@ -31,7 +33,12 @@ function batch_id_load_textdomain() {
 add_action('plugins_loaded', 'batch_id_load_textdomain');
 
 // Hook to create tables on plugin activation
-register_activation_hook(__FILE__, 'batch_id_create_tables');
+register_activation_hook(__FILE__, 'batch_id_activate_plugin');
+
+function batch_id_activate_plugin() {
+    batch_id_create_tables();
+    batch_id_upgrade_database();
+}
 
 register_uninstall_hook(__FILE__, 'batch_id_remove_tables');
 
