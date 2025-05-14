@@ -15,9 +15,6 @@ if (!defined('ABSPATH')) {
  */
 function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity = 1) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
-    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
-    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     // Validate Batch ID format
     if (!preg_match('/^\d{9}$/', $batch_id)) {
@@ -36,7 +33,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     }
 
     // Get batch type
-    $batch_type = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_batch_types WHERE id = %d", $type_id));
+    $batch_type = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . BATCH_TYPES_TABLE . " WHERE id = %d", $type_id));
 
     if (!$batch_type) {
         return [
@@ -49,7 +46,7 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
     $numeric_part = (int)substr($batch_id, 4); // ex: 00034
 
     // Already existing batch IDs
-    $existing_batch_ids = $wpdb->get_col("SELECT batch_id FROM $table_batch_ids");
+    $existing_batch_ids = $wpdb->get_col("SELECT batch_id FROM " . BATCH_ID_TABLE);
 
     $created_batches = [];
 
@@ -62,13 +59,13 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
         }
 
         // Insert the Batch ID
-        $wpdb->insert($table_batch_ids, ['batch_id' => $new_batch_id, 'type_id' => $batch_type->id, 'customer_id' => $customer_id]);
+        $wpdb->insert(BATCH_ID_TABLE, ['batch_id' => $new_batch_id, 'type_id' => $batch_type->id, 'customer_id' => $customer_id]);
 
         // Generate 10 barcodes linked to this Batch ID
         $barcodes = [];
         for ($j = 0; $j <= 9; $j++) {
             $barcode = $new_batch_id . $j;
-            $wpdb->insert($table_barcodes, [
+            $wpdb->insert(BARCODES_TABLE, [
                 'barcode' => $barcode,
                 'batch_id' => $new_batch_id,
                 'is_used' => 0,
@@ -101,12 +98,11 @@ function batch_id_create($batch_id, $type_id = 1, $customer_id = null, $quantity
  */
 function batch_id_delete($batch_id) {
     global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
 
-    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_ids WHERE batch_id = %s", $batch_id));
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM " . BATCH_ID_TABLE . " WHERE batch_id = %s", $batch_id));
 
     if ($exists) {
-        $wpdb->delete($table_batch_ids, ['batch_id' => $batch_id]);
+        $wpdb->delete(BATCH_ID_TABLE, ['batch_id' => $batch_id]);
         return [
             'success' => true,
             'message' => __('Batch ID deleted successfully.', 'batch-id')
