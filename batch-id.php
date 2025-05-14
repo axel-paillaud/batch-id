@@ -18,10 +18,12 @@ if (!defined('ABSPATH')) {
      exit;
 }
 
+require_once plugin_dir_path(__FILE__) . 'includes/constants.php';
 require_once plugin_dir_path(__FILE__) . 'includes/db-install.php';
 require_once plugin_dir_path(__FILE__) . 'includes/db-uninstall.php';
 require_once plugin_dir_path(__FILE__) . 'includes/upgrade.php';
 
+require_once plugin_dir_path(__FILE__) . 'includes/batch-service.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-controller.php';
 require_once plugin_dir_path(__FILE__) . 'includes/front-controller.php';
 require_once plugin_dir_path(__FILE__) . 'includes/user-batch-ids.php';
