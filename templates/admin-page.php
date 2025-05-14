@@ -92,13 +92,10 @@ if (!defined('ABSPATH')) exit;
     <hr>
 
     <div class="add-batch-id">
-
         <div class="add-batch-id-form-ctn">
-
             <h2><?php _e('Add a new batch ID.', 'batch-id'); ?></h2>
 
             <form method="post" id="batch-id-form" class="add-batch-id-form">
-
                 <div>
                     <label for="type_id"><?php _e('Batch Type:', 'batch-id'); ?></label>
                     <select
