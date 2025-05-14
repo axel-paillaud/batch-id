@@ -29,9 +29,9 @@ function batch_id_create_tables() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        INDEX (batch_id),
-        INDEX (customer_id),
-        INDEX (type_id)
+        KEY idx_batch_id (batch_id),
+        KEY idx_customer_id (customer_id),
+        KEY idx_type_id (type_id)
     ) $charset_collate;";
 
     // Barcode table
@@ -43,8 +43,8 @@ function batch_id_create_tables() {
         is_used TINYINT(1) DEFAULT 0,
         customer_id BIGINT(20) UNSIGNED DEFAULT NULL,
         PRIMARY KEY (id),
-        INDEX (batch_id),
-        INDEX (customer_id)
+        KEY idx_batch_id (batch_id),
+        KEY idx_customer_id (customer_id)
     ) $charset_collate;";
 
     // Execute SQL queries with dbDelta
