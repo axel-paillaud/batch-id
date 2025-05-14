@@ -3,6 +3,111 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function batch_id_admin_page() {
+    global $wpdb;
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
+
+    $response = ['success' => true, 'message' => ''];
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['batch_id'])) {
+            $response = batch_id_handle_create($_POST);
+        } elseif (isset($_POST['delete_batch_id'])) {
+            $response = batch_id_handle_delete($_POST);
+        } elseif (isset($_POST['add_batch_type'])) {
+            $response = batch_type_handle_create($_POST);
+        } elseif (isset($_POST['delete_batch_type_id'])) {
+            $response = batch_type_handle_delete($_POST);
+        }
+    }
+
+    $types = $wpdb->get_results("SELECT id, name, lang, prefix, color FROM $table_batch_types ORDER BY prefix ASC");
+
+    $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $batch_info = batch_id_get_admin_batches($current_page);
+
+    $last_batch_id = $wpdb->get_var("SELECT batch_id FROM {$table_batch_ids} ORDER BY id DESC LIMIT 1");
+    $next_batch_id = batch_id_generate_next_id($last_batch_id);
+
+    require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
+}
+
+function batch_id_handle_create($data) {
+    $batch_id = trim($data['batch_id']);
+    $type_id = intval($data['type_id']);
+    $customer_id = isset($data['customer_id']) && $data['customer_id'] !== '' ? intval($data['customer_id']) : null;
+    $quantity = isset($data['quantity']) ? max(1, intval($data['quantity'])) : 1;
+
+    return batch_id_create($batch_id, $type_id, $customer_id, $quantity);
+}
+
+function batch_id_handle_delete($data) {
+    $batch_id = sanitize_text_field($data['delete_batch_id']);
+    return batch_id_delete($batch_id);
+}
+
+function batch_type_handle_create($data) {
+    global $wpdb;
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
+
+    $name = sanitize_title($data['batch_name']);
+    $lang = sanitize_text_field($data['batch_lang']);
+    $prefix = intval($data['batch_prefix']);
+    $color = sanitize_hex_color($data['batch_color']);
+
+    $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
+    if ($name_exists) {
+        return [
+            'success' => false,
+            'message' => __('This slug is already in use.', 'batch-id'),
+        ];
+    }
+
+    $wpdb->insert($table_batch_types, [
+        'name'   => $name,
+        'lang'   => $lang,
+        'prefix' => $prefix,
+        'color'  => $color ?: null,
+    ]);
+
+    return [
+        'success' => true,
+        'message' => __('New batch type added.', 'batch-id'),
+    ];
+}
+
+function batch_type_handle_delete($data) {
+    global $wpdb;
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
+
+    $type_id = intval($data['delete_batch_type_id']);
+    $deleted = $wpdb->delete($table_batch_types, ['id' => $type_id]);
+
+    return [
+        'success' => (bool) $deleted,
+        'message' => $deleted
+            ? __('Batch type and all related Batch IDs deleted.', 'batch-id')
+            : __('Deletion failed.', 'batch-id')
+    ];
+}
+
+function batch_id_generate_next_id($last_batch_id = null) {
+    $batch_prefix = date('y') . date('m');
+
+    if ($last_batch_id && preg_match('/^\d(\d{4})(\d{5})$/', $last_batch_id, $matches)) {
+        $last_prefix = $matches[1];
+        $last_number = intval($matches[2]);
+        $next_number = ($last_prefix === $batch_prefix)
+            ? str_pad($last_number + 1, 5, '0', STR_PAD_LEFT)
+            : '00000';
+    } else {
+        $next_number = '00000';
+    }
+
+    return $batch_prefix . $next_number;
+}
+
 /**
  * Process Batch ID creation.
  *
@@ -167,97 +272,4 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
         'total_pages'   => $total_pages,
         'current_page'  => $page
     ];
-}
-
-function batch_id_admin_page() {
-    global $wpdb;
-    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
-    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
-
-    $response = ['success' => true, 'message' => ''];
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['batch_id'])) {
-            // Process new Batch ID creation
-            $batch_id = isset($_POST['batch_id']) ? trim($_POST['batch_id']) : '';
-            $batch_type = isset($_POST['type_id']) ? intval($_POST['type_id']) : 1;
-            $customer_id = (isset($_POST['customer_id']) && $_POST['customer_id'] !== '') ? intval($_POST['customer_id']) : NULL;
-            $quantity = isset($_POST['quantity']) ? max(1, intval($_POST['quantity'])) : 1;
-            $response = batch_id_create($batch_id, $batch_type, $customer_id, $quantity);
-        }
-
-        if (isset($_POST['delete_batch_id'])) {
-            // Process Batch ID deletion
-            $batch_id_to_delete = sanitize_text_field($_POST['delete_batch_id']);
-            $response = batch_id_delete($batch_id_to_delete);
-        }
-
-        if (isset($_POST['add_batch_type'])) {
-            $name = sanitize_title($_POST['batch_name']);
-            $lang = sanitize_text_field($_POST['batch_lang']);
-            $prefix = intval($_POST['batch_prefix']);
-            $color = sanitize_hex_color($_POST['batch_color']);
-
-            $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
-            if ($name_exists) {
-                $response = [
-                    'success' => false,
-                    'message' => __('This slug is already in use.', 'batch-id'),
-                ];
-            } else {
-                $wpdb->insert($table_batch_types, [
-                    'name'   => $name,
-                    'lang'   => $lang,
-                    'prefix' => $prefix,
-                    'color'  => $color ?: null,
-                ]);
-                $response = [
-                    'success' => true,
-                    'message' => __('New batch type added.', 'batch-id'),
-                ];
-            }
-        }
-
-        if (isset($_POST['delete_batch_type_id'])) {
-            $type_id = intval($_POST['delete_batch_type_id']);
-
-            $deleted = $wpdb->delete($table_batch_types, ['id' => $type_id]);
-
-            if ($deleted) {
-                $response = [
-                    'success' => true,
-                    'message' => __('Batch type and all related Batch IDs deleted.', 'batch-id')
-                ];
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => __('Deletion failed.', 'batch-id')
-                ];
-            }
-        }
-    }
-
-    // Get all batch types
-    $types = $wpdb->get_results("SELECT id, name, lang, prefix, color FROM $table_batch_types ORDER BY prefix ASC");
-
-    // Get pagination info
-    $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
-    $batch_info = batch_id_get_admin_batches($current_page);
-
-    // Generate the next available Batch ID
-    $batch_prefix = date('y') . date('m');
-    $last_batch_id = $wpdb->get_var("SELECT batch_id FROM {$table_batch_ids} ORDER BY id DESC LIMIT 1");
-
-    if ($last_batch_id && preg_match('/^\d(\d{4})(\d{5})$/', $last_batch_id, $matches)) {
-        $last_prefix = $matches[1];
-        $last_number = intval($matches[2]);
-        $next_number = ($last_prefix === $batch_prefix) ? str_pad($last_number + 1, 5, '0', STR_PAD_LEFT) : '00000';
-    } else {
-        $next_number = '00000';
-    }
-
-    $next_batch_id = $batch_prefix . $next_number;
-
-    // Pass data to template
-    require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
 }
