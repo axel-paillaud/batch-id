@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
 
 function batch_id_admin_page() {
     global $wpdb;
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     $response = ['success' => true, 'message' => ''];
 
@@ -20,12 +22,12 @@ function batch_id_admin_page() {
         }
     }
 
-    $types = $wpdb->get_results("SELECT id, name, lang, prefix, color FROM " . BATCH_TYPES_TABLE . " ORDER BY prefix ASC");
+    $types = $wpdb->get_results("SELECT id, name, lang, prefix, color FROM $table_batch_types ORDER BY prefix ASC");
 
     $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
     $batch_info = batch_id_get_admin_batches($current_page);
 
-    $last_batch_id = $wpdb->get_var("SELECT batch_id FROM " . BATCH_ID_TABLE . " ORDER BY id DESC LIMIT 1");
+    $last_batch_id = $wpdb->get_var("SELECT batch_id FROM {$table_batch_ids} ORDER BY id DESC LIMIT 1");
     $next_batch_id = batch_id_generate_next_id($last_batch_id);
 
     require plugin_dir_path(__FILE__) . '../templates/admin-page.php';
@@ -47,13 +49,14 @@ function batch_id_handle_delete($data) {
 
 function batch_type_handle_create($data) {
     global $wpdb;
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     $name = sanitize_title($data['batch_name']);
     $lang = sanitize_text_field($data['batch_lang']);
     $prefix = intval($data['batch_prefix']);
     $color = sanitize_hex_color($data['batch_color']);
 
-    $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM " . BATCH_TYPES_TABLE . " WHERE name = %s", $name));
+    $name_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_batch_types WHERE name = %s", $name));
     if ($name_exists) {
         return [
             'success' => false,
@@ -61,7 +64,7 @@ function batch_type_handle_create($data) {
         ];
     }
 
-    $wpdb->insert(BATCH_TYPES_TABLE, [
+    $wpdb->insert($table_batch_types, [
         'name'   => $name,
         'lang'   => $lang,
         'prefix' => $prefix,
@@ -76,9 +79,10 @@ function batch_type_handle_create($data) {
 
 function batch_type_handle_delete($data) {
     global $wpdb;
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     $type_id = intval($data['delete_batch_type_id']);
-    $deleted = $wpdb->delete(BATCH_TYPES_TABLE, ['id' => $type_id]);
+    $deleted = $wpdb->delete($table_batch_types, ['id' => $type_id]);
 
     return [
         'success' => (bool) $deleted,
@@ -106,12 +110,14 @@ function batch_id_generate_next_id($last_batch_id = null) {
 
 function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     global $wpdb;
+    $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
 
     $offset = ($page - 1) * $per_page;
 
     // Retrieve batch IDs with pagination
     $batch_results = $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM " . BATCH_ID_TABLE . " ORDER BY id DESC LIMIT %d OFFSET %d",
+        "SELECT * FROM $table_batch_ids ORDER BY id DESC LIMIT %d OFFSET %d",
         $per_page,
         $offset
     ));
@@ -120,7 +126,7 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     foreach ($batch_results as $batch) {
         // Get barcodes for this batch
         $barcodes = $wpdb->get_results($wpdb->prepare(
-            "SELECT barcode, is_used FROM " . BARCODES_TABLE . " WHERE batch_id = %s",
+            "SELECT barcode, is_used FROM $table_barcodes WHERE batch_id = %s",
             $batch->batch_id
         ));
 
@@ -142,7 +148,7 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     }
 
     // Get total batch count for pagination
-    $total_batches = $wpdb->get_var("SELECT COUNT(*) FROM " . BATCH_ID_TABLE);
+    $total_batches = $wpdb->get_var("SELECT COUNT(*) FROM $table_batch_ids");
     $total_pages = ceil($total_batches / $per_page);
 
     return [
