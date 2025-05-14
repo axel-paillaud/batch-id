@@ -155,6 +155,7 @@ if (!defined('ABSPATH')) exit;
                     <thead>
                         <tr>
                             <th><?php _e('Batch ID', 'batch-id'); ?></th>
+                            <th><?php _e('Batch Type', 'batch-id'); ?></th>
                             <th><?php _e('Customer', 'batch-id'); ?></th>
                             <th><?php _e('Barcodes', 'batch-id'); ?></th>
                             <th><?php _e('Actions', 'batch-id'); ?></th>
@@ -164,6 +165,7 @@ if (!defined('ABSPATH')) exit;
                         <?php foreach ($batch_info['batches'] as $batch) : ?>
                             <tr>
                                 <td class="<?php echo $batch['is_fully_used'] ? 'used' : ''; ?>"><?php echo esc_html($batch['batch_id']); ?></td>
+                                <td><?php echo esc_html($batch['batch_type'] ?? '-'); ?></td>
                                 <td><?php echo $batch['customer_name']; ?></td>
                                 <td>
                                     <button class="toggle-barcodes button" data-batch="<?php echo esc_attr($batch['batch_id']); ?>">

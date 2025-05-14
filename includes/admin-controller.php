@@ -112,6 +112,7 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
     $table_barcodes = $wpdb->prefix . 'smart_barcodes';
+    $table_batch_types = $wpdb->prefix . 'smart_batch_types';
 
     $offset = ($page - 1) * $per_page;
 
@@ -121,6 +122,8 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
         $per_page,
         $offset
     ));
+
+    $batch_types = $wpdb->get_results("SELECT id, lang FROM $table_batch_types", OBJECT_K);
 
     $batch_data = [];
     foreach ($batch_results as $batch) {
@@ -139,8 +142,12 @@ function batch_id_get_admin_batches($page = 1, $per_page = 13) {
             }
         }
 
+        // Get batch type name from type_id
+        $batch_type = isset($batch_types[$batch->type_id]) ? $batch_types[$batch->type_id]->lang : __('Unknown', 'batch-id');
+
         $batch_data[] = [
             'batch_id'     => $batch->batch_id,
+            'batch_type'   => $batch_type,
             'customer_name' => $customer_name,
             'barcodes'     => $barcodes,
             'is_fully_used' => count(array_filter($barcodes, fn($b) => $b->is_used == 0)) === 0
