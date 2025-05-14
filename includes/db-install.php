@@ -56,67 +56,64 @@ function batch_id_create_tables() {
     dbDelta($sql_barcodes);
 
     // Insert default batch types
-    $wpdb->insert(
-        $table_batch_types, [
+    $default_types = [
+        [
             'id'     => 1,
             'name'   => 'float',
             'lang'   => 'Floating',
             'prefix' => 0,
             'color'  => '#ffffff'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 2,
             'name'   => 'plasmid-amplicon',
             'lang'   => 'Plasmid Amplicon',
             'prefix' => 1,
             'color'  => '#caedfb'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 3,
             'name'   => 'genome',
             'lang'   => 'Genome',
             'prefix' => 2,
             'color'  => '#ffcccc'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 4,
             'name'   => 'sanger-premixed',
             'lang'   => 'Sanger Premixed',
             'prefix' => 3,
             'color'  => '#fbe2d5'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 5,
             'name'   => 'sanger-premium',
             'lang'   => 'Sanger Premium',
             'prefix' => 4,
             'color'  => '#fbe2d5'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 6,
             'name'   => 'meta-16s',
             'lang'   => 'Meta 16S',
             'prefix' => 5,
             'color'  => '#daf2d0'
-        ]
-    );
-    $wpdb->insert(
-        $table_batch_types, [
+        ],
+        [
             'id'     => 7,
             'name'   => 'specific-project',
             'lang'   => 'Specific Project',
             'prefix' => 6,
             'color'  => '#f2ceef'
-        ]
-    );
+        ],
+    ];
+
+    foreach ($default_types as $type) {
+        $exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM $table_batch_types WHERE id = %d", $type['id']
+        ));
+        if (!$exists) {
+            $wpdb->insert($table_batch_types, $type);
+        }
+    }
 }

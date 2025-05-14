@@ -4,7 +4,6 @@ function batch_id_upgrade_database() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smart_batch_types';
 
-    // Vérifie si une contrainte UNIQUE existe sur la colonne 'prefix'
     $index_name = $wpdb->get_var(
         $wpdb->prepare("
             SELECT INDEX_NAME
@@ -16,8 +15,8 @@ function batch_id_upgrade_database() {
         ", $table_name)
     );
 
+    // Remove the index UNIQUE
     if ($index_name) {
-        // Supprime l'index UNIQUE
         $wpdb->query("ALTER TABLE $table_name DROP INDEX $index_name;");
     }
 }
