@@ -11,11 +11,12 @@ function batch_id_create_tables() {
     // Batch Types table
     $table_batch_types = $wpdb->prefix . 'smart_batch_types';
     $sql_batch_types = "CREATE TABLE $table_batch_types (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL,
         lang TEXT DEFAULT NULL,
-        prefix INT NOT NULL UNIQUE,
-        color VARCHAR(9) DEFAULT NULL
+        prefix INT NOT NULL,
+        color VARCHAR(9) DEFAULT NULL,
+        PRIMARY KEY (id)
     ) $charset_collate;";
 
     // Batch ID table
@@ -30,9 +31,7 @@ function batch_id_create_tables() {
         PRIMARY KEY (id),
         INDEX (batch_id),
         INDEX (customer_id),
-        INDEX (type_id),
-        FOREIGN KEY (type_id) REFERENCES $table_batch_types(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (customer_id) REFERENCES $wpdb->users(ID) ON DELETE SET NULL ON UPDATE CASCADE
+        INDEX (type_id)
     ) $charset_collate;";
 
     // Barcode table
@@ -45,8 +44,7 @@ function batch_id_create_tables() {
         customer_id BIGINT(20) UNSIGNED DEFAULT NULL,
         PRIMARY KEY (id),
         INDEX (batch_id),
-        INDEX (customer_id),
-        FOREIGN KEY (batch_id) REFERENCES $table_batch_ids(batch_id) ON DELETE CASCADE
+        INDEX (customer_id)
     ) $charset_collate;";
 
     // Execute SQL queries with dbDelta
