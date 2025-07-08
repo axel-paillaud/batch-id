@@ -36,7 +36,7 @@ if (!defined('ABSPATH')) exit;
 </style>
 
 <div class="batch-add">
-    <h2><?php _e('Claim a Batch ID', 'batch-id'); ?></h2>
+    <h2><?php _e('Request a Batch ID', 'batch-id'); ?></h2>
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <label hidden for="claim_batch_id"><?php _e('Enter your Batch ID:', 'batch-id'); ?></label>
         <input
@@ -50,7 +50,7 @@ if (!defined('ABSPATH')) exit;
             required
         />
         <input type="hidden" name="action" value="batch_id_claim">
-        <button type="submit" class="button"><?php _e('Claim', 'batch-id'); ?></button>
+        <button type="submit" class="button"><?php _e('Get Batch ID', 'batch-id'); ?></button>
     </form>
 
     <?php if (!empty($batch_message)) : ?>

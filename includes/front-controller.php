@@ -36,7 +36,7 @@ function batch_id_claim_batch(int $batch_id) {
 
     // Check if the Batch ID is of type "float" (prefix = 0)
     if (!str_starts_with($batch_id, '0')) {
-        return ['success' => false, 'message' => __("Only `float` Batch IDs can be claimed.", 'batch-id')];
+        return ['success' => false, 'message' => __("Only `float` Batch IDs can be requested.", 'batch-id')];
     }
 
     // Assign the Batch ID to the current user
@@ -45,7 +45,7 @@ function batch_id_claim_batch(int $batch_id) {
     // Assign all associated barcodes to the user
     $wpdb->update($table_barcodes, ['customer_id' => $user_id], ['batch_id' => $batch_id]);
 
-    return ['success' => true, 'message' => __('Batch ID successfully claimed!', 'batch-id')];
+    return ['success' => true, 'message' => __('Batch ID requested successfully!', 'batch-id')];
 }
 
 function batch_id_handle_claim_request() {
