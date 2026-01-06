@@ -57,6 +57,12 @@ function batch_id_enqueue_front_scripts() {
             $version,
             true
         );
+
+        // Localize script for AJAX
+        wp_localize_script('batch-id-front-js', 'batchIdClaimData', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('batch_id_claim_nonce')
+        ]);
     }
 }
 add_action('wp_enqueue_scripts', 'batch_id_enqueue_front_scripts');
@@ -128,3 +134,7 @@ add_action('wp_ajax_batch_id_toggle_barcode_used', 'batch_id_toggle_barcode_used
 // Add batch ID on back-office user page
 add_action('show_user_profile', 'batch_id_display_user_batches');
 add_action('edit_user_profile', 'batch_id_display_user_batches');
+
+// Handle batch ID claim requests via AJAX
+add_action('wp_ajax_batch_id_claim', 'batch_id_handle_claim_request_ajax');
+add_action('wp_ajax_nopriv_batch_id_claim', 'batch_id_handle_claim_request_ajax');

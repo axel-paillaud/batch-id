@@ -6,16 +6,14 @@ if (!defined('ABSPATH')) {
 /**
  * Claim a Batch ID for the current user.
  *
- * @param int $batch_id The Batch ID to claim.
+ * @param string $batch_id The Batch ID to claim.
  * @return array An array with 'success' and 'message' keys.
  */
-function batch_id_claim_batch(int $batch_id) {
+function batch_id_claim_batch($batch_id) {
     global $wpdb;
     $user_id = get_current_user_id();
     $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';
     $table_barcodes = $wpdb->prefix . 'smart_barcodes';
-
-    $batch_id = isset($_POST['claim_batch_id']) ? trim($_POST['claim_batch_id']) : '';
 
     // Check if the Batch ID is valid (10 digits)
     if (!preg_match('/^\d{10}$/', $batch_id)) {
@@ -48,20 +46,34 @@ function batch_id_claim_batch(int $batch_id) {
     return ['success' => true, 'message' => __('Batch ID requested successfully!', 'batch-id')];
 }
 
-function batch_id_handle_claim_request() {
-    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['claim_batch_id']) && is_user_logged_in()) {
-        $batch_id = sanitize_text_field(trim($_POST['claim_batch_id']));
-        $response = batch_id_claim_batch($batch_id);
-
-        // Redirect after submission with a message in query string
-        wp_redirect(add_query_arg([
-            'batch_status' => $response['success'] ? 'success' : 'error',
-            'batch_message' => urlencode($response['message'])
-        ], wp_get_referer()));
-        exit;
+function batch_id_handle_claim_request_ajax() {
+    // Check if user is logged in
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => __('You must be logged in to claim a Batch ID.', 'batch-id')]);
+    }
+    
+    // Check if batch_id is provided
+    if (!isset($_POST['claim_batch_id'])) {
+        wp_send_json_error(['message' => __('Batch ID is required.', 'batch-id')]);
+    }
+    
+    // Verify nonce for security
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'batch_id_claim_nonce')) {
+        wp_send_json_error(['message' => __('Security check failed.', 'batch-id')]);
+    }
+    
+    $batch_id = sanitize_text_field(trim($_POST['claim_batch_id']));
+    $response = batch_id_claim_batch($batch_id);
+    
+    if ($response['success']) {
+        wp_send_json_success([
+            'message' => $response['message'],
+            'redirect_url' => wc_get_account_endpoint_url('batch-id')
+        ]);
+    } else {
+        wp_send_json_error(['message' => $response['message']]);
     }
 }
-add_action('admin_post_batch_id_claim', 'batch_id_handle_claim_request');
 
 function batch_id_display_front_page() {
     $user_id = get_current_user_id();
