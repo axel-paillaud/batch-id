@@ -64,11 +64,16 @@
 }
 
 #batch-id-message {
+    position: fixed;
+    top: 32px;
+    right: 20px;
+    z-index: 9999;
     border-radius: 5px;
-    padding: 10px;
+    padding: 15px 25px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 10px;
+    min-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 #batch-id-message.success {
     background-color: #d4edda;
