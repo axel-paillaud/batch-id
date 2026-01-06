@@ -111,7 +111,7 @@ jQuery(document).ready(function($) {
 });
 
 function showBatchIdMessage(message, type) {
-    let msgDiv = $("#batch-id-message");
+    let msgDiv = jQuery("#batch-id-message");
     msgDiv.text(message)
         .removeClass("success error")
         .addClass(type)
