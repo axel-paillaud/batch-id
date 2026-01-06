@@ -108,6 +108,43 @@ function batch_id_generate_next_id($last_batch_id = null) {
     return $batch_prefix . $next_number;
 }
 
+function batch_id_toggle_barcode_used_ajax() {
+    // Verify nonce for security
+    check_ajax_referer('batch_id_toggle_barcode', 'nonce');
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => __('Unauthorized', 'batch-id')]);
+    }
+
+    $barcode = isset($_POST['barcode']) ? sanitize_text_field($_POST['barcode']) : '';
+    $is_used = isset($_POST['is_used']) ? intval($_POST['is_used']) : 0;
+
+    if (empty($barcode)) {
+        wp_send_json_error(['message' => __('Invalid barcode', 'batch-id')]);
+    }
+
+    global $wpdb;
+    $table_barcodes = $wpdb->prefix . 'smart_barcodes';
+
+    $updated = $wpdb->update(
+        $table_barcodes,
+        ['is_used' => $is_used],
+        ['barcode' => $barcode],
+        ['%d'],
+        ['%s']
+    );
+
+    if ($updated !== false) {
+        wp_send_json_success([
+            'message' => __('Barcode status updated', 'batch-id'),
+            'barcode' => $barcode,
+            'is_used' => $is_used
+        ]);
+    } else {
+        wp_send_json_error(['message' => __('Failed to update barcode', 'batch-id')]);
+    }
+}
+
 function batch_id_get_admin_batches($page = 1, $per_page = 13) {
     global $wpdb;
     $table_batch_ids = $wpdb->prefix . 'smart_batch_ids';

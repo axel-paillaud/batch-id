@@ -12,6 +12,53 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    // Handle barcode checkbox changes
+    document.querySelectorAll(".barcode-used-checkbox").forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            let barcode = this.getAttribute("data-barcode");
+            let isUsed = this.checked ? 1 : 0;
+            let listItem = this.closest(".barcode-item");
+            
+            // Disable checkbox during request
+            this.disabled = true;
+
+            jQuery.ajax({
+                url: batchIdAjax.ajaxurl,
+                type: "POST",
+                data: {
+                    action: "batch_id_toggle_barcode_used",
+                    barcode: barcode,
+                    is_used: isUsed,
+                    nonce: batchIdAjax.toggle_barcode_nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update UI
+                        if (isUsed) {
+                            listItem.classList.add("used");
+                        } else {
+                            listItem.classList.remove("used");
+                        }
+                        showBatchIdMessage(response.data.message, "success");
+                    } else {
+                        // Revert checkbox on error
+                        checkbox.checked = !checkbox.checked;
+                        showBatchIdMessage(response.data.message || "Error updating barcode", "error");
+                    }
+                },
+                error: function() {
+                    // Revert checkbox on error
+                    checkbox.checked = !checkbox.checked;
+                    showBatchIdMessage("Network error", "error");
+                },
+                complete: function() {
+                    // Re-enable checkbox
+                    checkbox.disabled = false;
+                }
+            });
+        });
+    });
 });
 
 // Autocomplete for customer field

@@ -174,8 +174,16 @@ if (!defined('ABSPATH')) exit;
                                     <div class="barcodes-list" data-batch="<?php echo esc_attr($batch['batch_id']); ?>" style="display:none;">
                                         <ul>
                                             <?php foreach ($batch['barcodes'] as $barcode) : ?>
-                                                <li class="<?php echo ($barcode->is_used == 1) ? 'used' : ''; ?>">
-                                                    <?php echo esc_html($barcode->barcode); ?>
+                                                <li class="barcode-item <?php echo ($barcode->is_used == 1) ? 'used' : ''; ?>">
+                                                    <label class="barcode-checkbox-label">
+                                                        <span class="barcode-text"><?php echo esc_html($barcode->barcode); ?></span>
+                                                        <input 
+                                                            type="checkbox" 
+                                                            class="barcode-used-checkbox" 
+                                                            data-barcode="<?php echo esc_attr($barcode->barcode); ?>"
+                                                            <?php checked($barcode->is_used, 1); ?>
+                                                        />
+                                                    </label>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>

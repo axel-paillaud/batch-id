@@ -23,12 +23,12 @@
 .add-batch-type-form > div > input,
 .add-batch-id-form > div > input {
     width: 100%;
-} 
+}
 
 .add-batch-type-form > div > select,
 .add-batch-id-form > div > select {
     width: 100%;
-} 
+}
 
 #batch-type-table tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
@@ -112,6 +112,41 @@
 
 .barcodes-list ul > li.used {
    text-decoration: line-through;
+}
+
+.barcode-item {
+    margin: 4px 0;
+}
+
+.barcode-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.barcode-checkbox-label:hover {
+    background-color: #f0f0f0;
+}
+
+.barcode-used-checkbox {
+    cursor: pointer;
+    margin: 0;
+}
+
+.barcode-used-checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.barcode-text {
+    user-select: all;
+}
+
+.barcode-item.used .barcode-text {
+    color: #9f0404;
+    text-decoration: line-through;
 }
 
 #batch-id-table tbody tr td.used {

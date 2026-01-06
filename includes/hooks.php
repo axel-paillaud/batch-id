@@ -14,6 +14,11 @@ function batch_id_enqueue_admin_scripts($hook) {
 
     wp_enqueue_script('batch-id-admin-js', $plugin_url . '../assets/js/admin.js', ['jquery', 'jquery-ui-autocomplete'], false, true);
 
+    // Localize script for AJAX
+    wp_localize_script('batch-id-admin-js', 'batchIdAjax', [
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'toggle_barcode_nonce' => wp_create_nonce('batch_id_toggle_barcode')
+    ]);
 }
 add_action('admin_enqueue_scripts', 'batch_id_enqueue_admin_scripts');
 
@@ -116,6 +121,9 @@ function batch_id_search_customers() {
 }
 
 add_action('wp_ajax_batch_id_search_customers', 'batch_id_search_customers');
+
+// AJAX action for toggling barcode used status
+add_action('wp_ajax_batch_id_toggle_barcode_used', 'batch_id_toggle_barcode_used_ajax');
 
 // Add batch ID on back-office user page
 add_action('show_user_profile', 'batch_id_display_user_batches');
