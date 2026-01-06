@@ -26,7 +26,7 @@ if (!defined('ABSPATH')) exit;
                             data-batch="<?php echo esc_attr($batch['batch_id']); ?>"
                             type="button"
                         >
-                            <?php _e('Voir les barcodes', 'batch-id'); ?>
+                            <?php _e('View the barcodes', 'batch-id'); ?>
                         </button>
                         <div class="barcodes-list" data-batch="<?php echo esc_attr($batch['batch_id']); ?>" style="display:none;">
                             <ul>
