@@ -9,7 +9,7 @@ NC='\033[0m' # Reset
 REMOTE_USER="tava6855"
 REMOTE_HOST="sharp.o2switch.net"
 REMOTE_DIR="/home/tava6855/public_html/wp-content/plugins/batch-id"
-SMARTLIFE_LOCAL_PATH="/home/$(whoami)/Code/clients/smartlife/smartlifebiosciences.local/wp-content/plugins/batch-id"
+SMARTLIFE_LOCAL_PATH="/home/$(whoami)/Code/clients/smartlife/public_html/wp-content/plugins/batch-id"
 RSYNC_IGNORE="$SMARTLIFE_LOCAL_PATH/.rsyncignore"
 
 # Check if the source directory exists
